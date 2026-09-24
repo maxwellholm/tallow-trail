@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SeedOilFree — seed-oil-free restaurants in the United States</title>
-<meta name="description" content="A hand-verified guide to restaurants in the United States that cook with tallow, butter, and olive oil instead of seed oils — plus how to order clean at national chains.">
-<meta property="og:title" content="SeedOilFree — seed-oil-free restaurants in the United States">
-<meta property="og:description" content="Hand-verified spots that skip seed oils, plus chain order-hacks for everywhere else.">
+<title>SeedOilFree — seed-oil-free restaurants in NYC</title>
+<meta name="description" content="A hand-verified guide to NYC restaurants that cook with tallow, butter, and olive oil instead of seed oils — plus how to order clean at national chains.">
+<meta property="og:title" content="SeedOilFree — seed-oil-free restaurants in NYC">
+<meta property="og:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,6 +237,7 @@
   <p class="sub">A hand-verified guide to NYC restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
 
   <div class="filters">
+    <input id="search" type="text" placeholder="Search a name or city…" oninput="render()">
     <select id="statusFilter" onchange="render()">
       <option value="all">All statuses</option>
       <option value="clean">Fully clean</option>
@@ -299,13 +300,15 @@ const data = [
 ];
 
 function render() {
+  const q = document.getElementById('search').value.toLowerCase();
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
 
   const filtered = data.filter(r => {
+    const matchesQ = !q || r.name.toLowerCase().includes(q) || r.loc.toLowerCase().includes(q);
     const matchesStatus = statusF === 'all' || r.status === statusF;
     const matchesType = typeF === 'all' || r.type === typeF;
-    return matchesStatus && matchesType;
+    return matchesQ && matchesStatus && matchesType;
   });
 
   document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
