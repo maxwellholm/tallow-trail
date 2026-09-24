@@ -10,87 +10,86 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --kraft: #EFE6D1;
-    --kraft-alt: #E4D6AF;
-    --char: #241C16;
-    --ink-soft: #6E5C43;
-    --line: #C3B084;
-    --ember: #A8401B;
-    --ember-soft: #F1D9CC;
-    --tallow: #8A6A17;
-    --tallow-soft: #EBDFB0;
-    --clean-bg: #E4EBD8;
-    --clean-ink: #3F5C2C;
-    --partial-bg: #F3E6C9;
-    --partial-ink: #8A6A17;
-    --hack-bg: #EFD9CE;
-    --hack-ink: #A8401B;
-    --paper-line: rgba(36,28,22,0.05);
+    --bg: #FAF8F2;
+    --bg-alt: #F1EEE3;
+    --ink: #2B332A;
+    --ink-soft: #6B7568;
+    --line: #DFE2D4;
+    --sage: #4F7A5A;
+    --sage-soft: #E3EDE2;
+    --amber: #A9822F;
+    --amber-soft: #F4EAD1;
+    --coral: #B85B3A;
+    --coral-soft: #F4E0D5;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --kraft: #1B1611;
-      --kraft-alt: #241C15;
-      --char: #F1E8D5;
-      --ink-soft: #B2A183;
-      --line: #453824;
-      --ember: #E2724A;
-      --ember-soft: #3A241B;
-      --tallow: #D9B84E;
-      --tallow-soft: #362C15;
-      --clean-bg: #263422;
-      --clean-ink: #9BC17F;
-      --partial-bg: #362C15;
-      --partial-ink: #D9B84E;
-      --hack-bg: #3A241B;
-      --hack-ink: #E2724A;
-      --paper-line: rgba(241,232,213,0.04);
+      --bg: #171C16;
+      --bg-alt: #1F251D;
+      --ink: #EAF0E6;
+      --ink-soft: #9CAA95;
+      --line: #333C30;
+      --sage: #86BB92;
+      --sage-soft: #23302A;
+      --amber: #D9B45C;
+      --amber-soft: #332A19;
+      --coral: #E08A65;
+      --coral-soft: #362419;
     }
+  }
+  :root[data-theme="dark"] {
+    --bg: #171C16;
+    --bg-alt: #1F251D;
+    --ink: #EAF0E6;
+    --ink-soft: #9CAA95;
+    --line: #333C30;
+    --sage: #86BB92;
+    --sage-soft: #23302A;
+    --amber: #D9B45C;
+    --amber-soft: #332A19;
+    --coral: #E08A65;
+    --coral-soft: #362419;
   }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background:
-      repeating-linear-gradient(0deg, var(--paper-line) 0px, var(--paper-line) 1px, transparent 1px, transparent 28px),
-      var(--kraft);
-    color: var(--char);
+    background: var(--bg);
+    color: var(--ink);
     font-family: 'Inter', -apple-system, sans-serif;
   }
-  .page { max-width: 880px; margin: 0 auto; padding: 48px 22px 90px; }
+  .page { max-width: 860px; margin: 0 auto; padding: 52px 22px 90px; }
 
   header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
-    border-bottom: 3px solid var(--char);
-    padding-bottom: 20px;
+    padding-bottom: 22px;
     margin-bottom: 4px;
     flex-wrap: wrap;
   }
-  .brand { display: flex; align-items: baseline; gap: 12px; }
   h1 {
-    font-family: 'Zilla Slab', serif;
-    font-weight: 700;
-    font-size: clamp(32px, 6vw, 46px);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: clamp(30px, 6vw, 42px);
     margin: 0;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     line-height: 1;
+    color: var(--sage);
   }
   .tagline {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
-    color: var(--ember);
-    letter-spacing: 0.02em;
+    color: var(--ink-soft);
   }
-  .sub { color: var(--ink-soft); font-size: 15px; max-width: 56ch; margin: 16px 0 0; }
+  .sub { color: var(--ink-soft); font-size: 15.5px; max-width: 54ch; margin: 16px 0 0; line-height: 1.55; }
 
   .filters {
     position: sticky;
@@ -101,22 +100,21 @@
     flex-wrap: wrap;
     margin: 30px 0 20px;
     padding: 14px 16px;
-    background: var(--kraft-alt);
-    border: 1px solid var(--line);
-    box-shadow: 0 2px 0 var(--paper-line);
+    background: var(--bg-alt);
+    border-radius: 14px;
   }
   .filters input, .filters select {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    padding: 9px 10px;
+    padding: 10px 12px;
     border: 1px solid var(--line);
-    background: var(--kraft);
-    color: var(--char);
-    border-radius: 2px;
+    background: var(--bg);
+    color: var(--ink);
+    border-radius: 10px;
   }
   .filters input { flex: 1 1 220px; }
   .filters select { flex: 0 0 auto; }
-  .filters input:focus, .filters select:focus { outline: 2px solid var(--ember); outline-offset: 1px; }
+  .filters input:focus, .filters select:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
 
   .meta-row {
     display: flex;
@@ -128,85 +126,87 @@
     color: var(--ink-soft);
   }
 
-  .rows { border-top: 2px solid var(--char); }
+  .rows { display: flex; flex-direction: column; gap: 10px; }
   .row {
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: 4px 16px;
-    padding: 18px 4px;
-    border-bottom: 1px solid var(--line);
+    padding: 18px 18px;
+    background: var(--bg-alt);
+    border-radius: 14px;
     align-items: start;
-    transition: background 0.15s ease;
+    transition: transform 0.15s ease, background 0.15s ease;
   }
-  .row:hover { background: var(--paper-line); }
+  .row:hover { transform: translateY(-1px); }
   .row-icon {
-    font-size: 22px;
-    line-height: 1.3;
-    width: 28px;
+    font-size: 24px;
+    line-height: 1.2;
+    width: 30px;
     text-align: center;
   }
   .row-main { display: flex; flex-direction: column; gap: 3px; }
   .row-name {
-    font-family: 'Zilla Slab', serif;
-    font-weight: 600;
-    font-size: 18px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
   }
   .row-loc {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--ink-soft);
   }
-  .verified-tag { color: var(--clean-ink); font-weight: 600; }
-  .row-note { font-size: 13.5px; color: var(--char); margin-top: 4px; max-width: 56ch; }
+  .verified-tag { color: var(--sage); font-weight: 600; }
+  .row-note { font-size: 13.5px; color: var(--ink); margin-top: 4px; max-width: 54ch; line-height: 1.5; }
   .row-fat {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--ink-soft);
     font-family: 'IBM Plex Mono', monospace;
     margin-top: 2px;
   }
-  .stamp {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    padding: 5px 10px;
-    border: 1.5px solid currentColor;
+  .pill {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 5px 11px;
+    border-radius: 8px;
     white-space: nowrap;
-    transform: rotate(-2deg);
     height: fit-content;
   }
-  .stamp.clean { background: var(--clean-bg); color: var(--clean-ink); }
-  .stamp.partial { background: var(--partial-bg); color: var(--partial-ink); }
-  .stamp.hack { background: var(--hack-bg); color: var(--hack-ink); }
+  .pill.clean { background: var(--sage-soft); color: var(--sage); }
+  .pill.partial { background: var(--amber-soft); color: var(--amber); }
+  .pill.hack { background: var(--coral-soft); color: var(--coral); }
 
   .empty { padding: 34px 4px; color: var(--ink-soft); font-size: 14px; }
 
   .submit-box {
-    margin-top: 34px;
-    padding: 20px;
-    background: var(--kraft-alt);
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--ember);
+    margin-top: 30px;
+    padding: 22px;
+    background: var(--sage-soft);
+    border-radius: 16px;
   }
   .submit-box .title {
-    font-family: 'Zilla Slab', serif;
-    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
     font-size: 17px;
     margin-bottom: 6px;
+    color: var(--sage);
   }
-  .submit-box p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+  .submit-box p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 14px; line-height: 1.5; }
   .submit-box a {
     display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--char);
-    background: var(--kraft);
-    border: 1.5px solid var(--char);
-    padding: 9px 16px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--sage);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
     text-decoration: none;
   }
-  .submit-box a:hover { background: var(--ember); color: var(--kraft); border-color: var(--ember); }
+  .submit-box a:hover { opacity: 0.9; }
 
   .legend {
     display: flex;
@@ -215,15 +215,15 @@
     font-size: 13px;
     color: var(--ink-soft);
     margin: 22px 0 0;
-    padding-top: 16px;
+    padding-top: 18px;
     border-top: 1px solid var(--line);
   }
   .legend span { display: flex; align-items: center; gap: 6px; }
-  .dot { width: 10px; height: 10px; display: inline-block; border: 1.5px solid currentColor; }
+  .dot { width: 9px; height: 9px; display: inline-block; border-radius: 50%; background: currentColor; }
 
   @media (max-width: 560px) {
     .row { grid-template-columns: auto 1fr; }
-    .stamp { grid-column: 2; justify-self: start; margin-top: 6px; }
+    .pill { grid-column: 2; justify-self: start; margin-top: 6px; }
     .filters { position: static; }
   }
 </style>
@@ -231,15 +231,12 @@
 <body>
 <div class="page">
   <header>
-    <div class="brand">
-      <h1>Seedoilfree</h1>
-    </div>
-    <div class="tagline">EST. 2026 · NYC EDITION</div>
+    <h1>Seedoilfree</h1>
+    <div class="tagline">NYC · hand-verified</div>
   </header>
   <p class="sub">A hand-verified guide to NYC restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
 
   <div class="filters">
-    <input id="search" type="text" placeholder="Search a name or city…" oninput="render()">
     <select id="statusFilter" onchange="render()">
       <option value="all">All statuses</option>
       <option value="clean">Fully clean</option>
@@ -261,9 +258,9 @@
   <div class="rows" id="rows"></div>
 
   <div class="legend">
-    <span><span class="dot" style="color:var(--clean-ink)"></span> Fully clean — kitchen runs on tallow, butter, olive, avocado, or coconut oil</span>
-    <span><span class="dot" style="color:var(--partial-ink)"></span> Partial — clean on some items, fryer or sauces still use seed oil</span>
-    <span><span class="dot" style="color:var(--hack-ink)"></span> Hack only — order around the menu to avoid seed oils here</span>
+    <span><span class="dot" style="color:var(--sage)"></span> Fully clean — kitchen runs on tallow, butter, olive, avocado, or coconut oil</span>
+    <span><span class="dot" style="color:var(--amber)"></span> Partial — clean on some items, fryer or sauces still use seed oil</span>
+    <span><span class="dot" style="color:var(--coral)"></span> Hack only — order around the menu to avoid seed oils here</span>
   </div>
 
   <section class="submit-box">
@@ -277,15 +274,15 @@
 const data = [
   {name:"Hearth", loc:"East Village, NY", type:"independent", status:"clean", fat:"Tallow, butter, ghee, pork lard", note:"Full kitchen runs on traditional fats. Reported — not yet visited.", verified:false, icon:"🐄"},
   {name:"Springbone Kitchen", loc:"Greenwich Village, NY", type:"independent", status:"clean", fat:"Bone broth kitchen, no seed oils", note:"Health-forward fast-casual, multiple NYC locations. Reported — not yet visited.", verified:false, icon:"🍲"},
-  {name:"True Food Kitchen", loc:"Multiple cities", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils.", icon:"🫒"},
+  {name:"True Food Kitchen", loc:"Multiple cities", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils.", icon:"🥬"},
   {name:"Woods Hill Pier 4", loc:"Boston, MA", type:"independent", status:"clean", fat:"Tallow, olive oil", note:"Sources fat directly from its own regenerative farm.", icon:"🐄"},
   {name:"TownHall", loc:"Columbus, OH", type:"independent", status:"clean", fat:"Avocado, coconut, olive oil", note:"One of the first US restaurants to go fully seed-oil-free.", icon:"🥑"},
   {name:"Ron's Original Bar & Grille", loc:"Pennsylvania", type:"independent", status:"clean", fat:"Cold-pressed avocado oil, EVOO, ghee", note:"Completed a full switch away from seed oils menu-wide.", icon:"🥑"},
-  {name:"Sweetgreen", loc:"Nationwide", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings.", icon:"🫒"},
-  {name:"Crisp & Green", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen.", icon:"🫒"},
+  {name:"Sweetgreen", loc:"Nationwide", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings.", icon:"🥬"},
+  {name:"Crisp & Green", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen.", icon:"🥬"},
   {name:"Elevation Burger", loc:"Multiple states", type:"chain", status:"clean", fat:"100% olive oil (fries)", note:"Grass-fed beef, fries fried in olive oil for years.", icon:"🍔"},
   {name:"Blaze Pizza", loc:"Nationwide", type:"chain", status:"clean", fat:"Extra virgin olive oil", note:"EVOO on the dough, no fryer in the core pizza line.", icon:"🍕"},
-  {name:"CoreLife Eatery", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola.", icon:"🫒"},
+  {name:"CoreLife Eatery", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola.", icon:"🥬"},
   {name:"The Publican", loc:"Chicago, IL", type:"independent", status:"partial", fat:"Tallow (mains), some seed oil elsewhere", note:"Nose-to-tail beer hall leaning on traditional fats for most dishes.", icon:"🐖"},
   {name:"Hawksmoor NYC", loc:"New York, NY", type:"independent", status:"partial", fat:"Butter, beef fat (steakhouse)", note:"British steakhouse import — verify current fryer oil locally.", icon:"🧈"},
   {name:"Steak 'n Shake", loc:"Nationwide", type:"chain", status:"partial", fat:"100% beef tallow (fries, tots, onion rings, tenders)", note:"Fryer is fully tallow; confirm other menu items separately.", icon:"🐄"},
@@ -302,20 +299,18 @@ const data = [
 ];
 
 function render() {
-  const q = document.getElementById('search').value.toLowerCase();
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
 
   const filtered = data.filter(r => {
-    const matchesQ = !q || r.name.toLowerCase().includes(q) || r.loc.toLowerCase().includes(q);
     const matchesStatus = statusF === 'all' || r.status === statusF;
     const matchesType = typeF === 'all' || r.type === typeF;
-    return matchesQ && matchesStatus && matchesType;
+    return matchesStatus && matchesType;
   });
 
   document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
 
-  const stampLabel = {clean: 'CLEAN', partial: 'PARTIAL', hack: 'HACK ONLY'};
+  const pillLabel = {clean: 'CLEAN', partial: 'PARTIAL', hack: 'HACK ONLY'};
 
   document.getElementById('rows').innerHTML = filtered.map(r => `
     <div class="row">
@@ -326,7 +321,7 @@ function render() {
         <div class="row-note">${r.note}</div>
         <div class="row-fat">${r.fat}</div>
       </div>
-      <div class="stamp ${r.status}">${stampLabel[r.status]}</div>
+      <div class="pill ${r.status}">${pillLabel[r.status]}</div>
     </div>
   `).join('') || '<p class="empty">Nothing matches that search.</p>';
 }
