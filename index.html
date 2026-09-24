@@ -3,11 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SeedOilFree — seed-oil-free restaurants in NYC</title>
-<meta name="description" content="A hand-verified guide to NYC restaurants that cook with tallow, butter, and olive oil instead of seed oils — plus how to order clean at national chains.">
-<meta property="og:title" content="SeedOilFree — seed-oil-free restaurants in NYC">
+<title>Seed Oil Free Restaurants in NYC | SeedOilFree — Hand-Verified Guide</title>
+<meta name="description" content="Find NYC restaurants that cook with tallow, butter, and olive oil instead of seed oils. Hand-verified listings, plus how to order clean at Chipotle, Chick-fil-A, and other national chains.">
+<link rel="canonical" href="https://seedoilfree.io/">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Seed Oil Free Restaurants in NYC | SeedOilFree">
 <meta property="og:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://seedoilfree.io/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Seed Oil Free Restaurants in NYC">
+<meta name="twitter:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Seed Oil Free Restaurants",
+  "itemListElement": [
+    {"@type":"Restaurant","position":1,"name":"Hearth","address":{"@type":"PostalAddress","addressLocality":"New York","addressRegion":"NY"}},
+    {"@type":"Restaurant","position":2,"name":"Springbone Kitchen","address":{"@type":"PostalAddress","addressLocality":"New York","addressRegion":"NY"}},
+    {"@type":"Restaurant","position":3,"name":"True Food Kitchen"},
+    {"@type":"Restaurant","position":4,"name":"Woods Hill Pier 4","address":{"@type":"PostalAddress","addressLocality":"Boston","addressRegion":"MA"}},
+    {"@type":"Restaurant","position":5,"name":"TownHall","address":{"@type":"PostalAddress","addressLocality":"Columbus","addressRegion":"OH"}},
+    {"@type":"Restaurant","position":6,"name":"Hawksmoor NYC","address":{"@type":"PostalAddress","addressLocality":"New York","addressRegion":"NY"}}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -75,6 +96,8 @@
     margin-bottom: 4px;
     flex-wrap: wrap;
   }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo-mark { flex-shrink: 0; }
   h1 {
     font-family: 'Manrope', sans-serif;
     font-weight: 800;
@@ -241,7 +264,15 @@
 <body>
 <div class="page">
   <header>
-    <h1>Seedoilfree</h1>
+    <div class="brand">
+      <svg class="logo-mark" width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="22" cy="22" r="22" fill="var(--sage)"/>
+        <path d="M22 33C22 33 12 27.5 12 18.5C12 13.8 15.8 10 20.5 10C21.2 10 21.9 10.1 22.5 10.3C23.5 8.9 25.1 8 27 8C30.3 8 33 10.7 33 14C33 24.5 22 33 22 33Z" fill="var(--bg-alt)" stroke="var(--bg-alt)" stroke-width="0.5"/>
+        <path d="M20 30C20 26 20.5 20 25 15" stroke="var(--sage)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M21.5 22.5L23.5 24.5L27.5 19.5" stroke="var(--sage)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <h1>Seedoilfree</h1>
+    </div>
     <div class="tagline">NYC · hand-verified</div>
   </header>
   <p class="sub">A hand-verified guide to restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
