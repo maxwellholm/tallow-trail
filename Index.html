@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tallow Trail — seed-oil-free restaurants in NYC</title>
+<meta name="description" content="A hand-verified guide to NYC restaurants that cook with tallow, butter, and olive oil instead of seed oils — plus how to order clean at national chains.">
+<meta property="og:title" content="Tallow Trail — seed-oil-free restaurants in NYC">
+<meta property="og:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kraft: #EAE0C8;
+    --kraft-alt: #DECBA3;
+    --char: #241C16;
+    --ink-soft: #6E5C43;
+    --line: #B9A67C;
+    --ember: #A8401B;
+    --ember-soft: #F1D9CC;
+    --tallow: #8A6A17;
+    --tallow-soft: #EBDFB0;
+    --clean-bg: #E4EBD8;
+    --clean-ink: #3F5C2C;
+    --partial-bg: #F3E6C9;
+    --partial-ink: #8A6A17;
+    --hack-bg: #EFD9CE;
+    --hack-ink: #A8401B;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --kraft: #1E1712;
+      --kraft-alt: #291F17;
+      --char: #EFE6D3;
+      --ink-soft: #B2A183;
+      --line: #4A3D2A;
+      --ember: #E2724A;
+      --ember-soft: #3A241B;
+      --tallow: #D9B84E;
+      --tallow-soft: #362C15;
+      --clean-bg: #263422;
+      --clean-ink: #9BC17F;
+      --partial-bg: #362C15;
+      --partial-ink: #D9B84E;
+      --hack-bg: #3A241B;
+      --hack-ink: #E2724A;
+    }
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--kraft);
+    color: var(--char);
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 44px 22px 80px; }
+
+  header {
+    border-bottom: 3px solid var(--char);
+    padding-bottom: 18px;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 700;
+    font-size: clamp(30px, 6vw, 42px);
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .sub { color: var(--ink-soft); font-size: 15px; max-width: 58ch; margin: 0; }
+
+  .filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 28px 0 22px;
+    padding: 16px;
+    background: var(--kraft-alt);
+    border: 1px solid var(--line);
+  }
+  .filters input, .filters select {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 10px;
+    border: 1px solid var(--line);
+    background: var(--kraft);
+    color: var(--char);
+  }
+  .filters input { flex: 1 1 220px; }
+  .filters select { flex: 0 0 auto; }
+
+  .count { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; font-family: 'IBM Plex Mono', monospace; }
+
+  .rows { border-top: 2px solid var(--char); }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .row-main { display: flex; flex-direction: column; gap: 3px; }
+  .row-name {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .row-loc {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .verified-tag {
+    color: var(--clean-ink);
+    font-weight: 600;
+  }
+  .row-note { font-size: 13.5px; color: var(--char); margin-top: 4px; max-width: 58ch; }
+  .row-fat {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 5px 9px;
+    border: 1.5px solid currentColor;
+    white-space: nowrap;
+    transform: rotate(-2deg);
+    height: fit-content;
+  }
+  .stamp.clean { background: var(--clean-bg); color: var(--clean-ink); }
+  .stamp.partial { background: var(--partial-bg); color: var(--partial-ink); }
+  .stamp.hack { background: var(--hack-bg); color: var(--hack-ink); }
+
+  h2 {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    font-size: 19px;
+    margin: 46px 0 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 14px 0 0;
+  }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; display: inline-block; border: 1.5px solid currentColor; }
+
+  .biz-note {
+    margin-top: 50px;
+    background: var(--kraft-alt);
+    border-left: 3px solid var(--ember);
+    padding: 18px 20px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .biz-note strong { color: var(--char); }
+
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+    .stamp { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Tallow Trail</h1>
+    <p class="sub">A hand-verified guide to NYC restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
+  </header>
+
+  <div class="filters">
+    <input id="search" type="text" placeholder="Search a name or city…" oninput="render()">
+    <select id="statusFilter" onchange="render()">
+      <option value="all">All statuses</option>
+      <option value="clean">Fully clean</option>
+      <option value="partial">Partial / some items</option>
+      <option value="hack">Order-hack only</option>
+    </select>
+    <select id="typeFilter" onchange="render()">
+      <option value="all">All types</option>
+      <option value="independent">Independent restaurant</option>
+      <option value="chain">National chain</option>
+    </select>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div class="rows" id="rows"></div>
+
+  <section style="margin-top:34px; padding:18px; background:var(--kraft-alt); border:1px solid var(--line);">
+    <div style="font-family:'Zilla Slab',serif; font-weight:600; font-size:16px; margin-bottom:6px;">Know a spot that's missing?</div>
+    <p style="font-size:13.5px; color:var(--ink-soft); margin:0 0 10px;">Tell us the name, neighborhood, and what oil they cook with — we verify NYC listings in person before they go live.</p>
+    <a href="mailto:maxholm21@gmail.com?subject=Tallow%20Trail%20submission&body=Restaurant%20name%3A%0ANeighborhood%3A%0AWhat%20oil%20do%20they%20cook%20with%3A%0AHow%20do%20you%20know%3A" style="font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--char); text-decoration:underline;">Submit a restaurant →</a>
+  </section>
+
+  <div class="legend">
+    <span><span class="dot" style="color:var(--clean-ink)"></span> Fully clean — kitchen runs on tallow, butter, olive, avocado, or coconut oil</span>
+    <span><span class="dot" style="color:var(--partial-ink)"></span> Partial — clean on some items, fryer or sauces still use seed oil</span>
+    <span><span class="dot" style="color:var(--hack-ink)"></span> Hack only — order around the menu to avoid seed oils here</span>
+  </div>
+
+  <section class="biz-note">
+    <strong>Status:</strong> this is the free-tier MVP — NYC independents marked "reported, unverified" need an actual visit before they should carry a ✓. Swap in spots you know personally, replace the placeholder submission inbox, then deploy. Paid verified-badge tier for restaurants comes after there's a real base of visitors checking this.
+  </section>
+</div>
+
+<script>
+const data = [
+  {name:"Hearth", loc:"East Village, NY", type:"independent", status:"clean", fat:"Tallow, butter, ghee, pork lard", note:"Full kitchen runs on traditional fats. Reported — not yet visited.", verified:false},
+  {name:"Springbone Kitchen", loc:"Greenwich Village, NY", type:"independent", status:"clean", fat:"Bone broth kitchen, no seed oils", note:"Health-forward fast-casual, multiple NYC locations. Reported — not yet visited.", verified:false},
+  {name:"True Food Kitchen", loc:"Multiple cities", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils."},
+  {name:"Woods Hill Pier 4", loc:"Boston, MA", type:"independent", status:"clean", fat:"Tallow, olive oil", note:"Sources fat directly from its own regenerative farm."},
+  {name:"TownHall", loc:"Columbus, OH", type:"independent", status:"clean", fat:"Avocado, coconut, olive oil", note:"One of the first US restaurants to go fully seed-oil-free."},
+  {name:"Ron's Original Bar & Grille", loc:"Pennsylvania", type:"independent", status:"clean", fat:"Cold-pressed avocado oil, EVOO, ghee", note:"Completed a full switch away from seed oils menu-wide."},
+  {name:"Sweetgreen", loc:"Nationwide", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings."},
+  {name:"Crisp & Green", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen."},
+  {name:"Elevation Burger", loc:"Multiple states", type:"chain", status:"clean", fat:"100% olive oil (fries)", note:"Grass-fed beef, fries fried in olive oil for years."},
+  {name:"Blaze Pizza", loc:"Nationwide", type:"chain", status:"clean", fat:"Extra virgin olive oil", note:"EVOO on the dough, no fryer in the core pizza line."},
+  {name:"CoreLife Eatery", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola."},
+  {name:"The Publican", loc:"Chicago, IL", type:"independent", status:"partial", fat:"Tallow (mains), some seed oil elsewhere", note:"Nose-to-tail beer hall leaning on traditional fats for most dishes."},
+  {name:"Hawksmoor NYC", loc:"New York, NY", type:"independent", status:"partial", fat:"Butter, beef fat (steakhouse)", note:"British steakhouse import — verify current fryer oil locally."},
+  {name:"Steak 'n Shake", loc:"Nationwide", type:"chain", status:"partial", fat:"100% beef tallow (fries, tots, onion rings, tenders)", note:"Fryer is fully tallow; confirm other menu items separately."},
+  {name:"Buffalo Wild Wings", loc:"Nationwide", type:"chain", status:"partial", fat:"Tallow (bone-in wings only)", note:"Order bone-in dry-rub wings; boneless and sides still hit the seed-oil fryer."},
+  {name:"Hopdoddy Burger Bar", loc:"Multiple states", type:"chain", status:"partial", fat:"Tallow (hand-cut fries)", note:"Fries are tallow-cooked; check burger toppings and sauces."},
+  {name:"Outback Steakhouse", loc:"Nationwide", type:"chain", status:"partial", fat:"Butter (steaks) / seed oil (fryer)", note:"Order the steak, skip the Bloomin' Onion and other fried apps."},
+  {name:"Texas Roadhouse", loc:"Nationwide", type:"chain", status:"partial", fat:"Butter (steaks, rolls) / seed oil (fryer)", note:"Steak and the famous rolls are clean; fried appetizers aren't."},
+  {name:"El Pollo Loco", loc:"Western US", type:"chain", status:"partial", fat:"Fire-grilled (clean) / seed oil (sides)", note:"Fire-grilled chicken itself is the clean order; tortillas and sides vary."},
+  {name:"Chipotle", loc:"Nationwide", type:"chain", status:"hack", fat:"Rice bran / soybean oil on the plancha; sunflower oil for chips", note:"Order carnitas (slow-cooked, not plancha-seared) over rice, beans, salsa, guac. Skip the chips and any plancha-seared protein."},
+  {name:"Five Guys", loc:"Nationwide", type:"chain", status:"hack", fat:"100% peanut oil (fryer)", note:"Peanut oil isn't a seed oil but is moderate-PUFA — burgers are griddled clean if you skip fries and mayo."},
+  {name:"Chick-fil-A", loc:"Nationwide", type:"chain", status:"hack", fat:"Peanut oil (chicken) / canola blend (waffle fries)", note:"Peanut-oil chicken is the better order; the waffle fries run on a canola blend."},
+  {name:"In-N-Out", loc:"Western US", type:"chain", status:"hack", fat:"100% sunflower oil (fries)", note:"Reputation doesn't match reality — fries are high-PUFA sunflower oil. Burger patty itself is griddled with no added oil."},
+  {name:"Dunkin' / Krispy Kreme", loc:"Nationwide", type:"chain", status:"hack", fat:"Palm shortening (fryer)", note:"Reverse gotcha — donut fryers usually run palm shortening, which is low-PUFA regardless of what else you think about donuts."},
+];
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const statusF = document.getElementById('statusFilter').value;
+  const typeF = document.getElementById('typeFilter').value;
+
+  const filtered = data.filter(r => {
+    const matchesQ = !q || r.name.toLowerCase().includes(q) || r.loc.toLowerCase().includes(q);
+    const matchesStatus = statusF === 'all' || r.status === statusF;
+    const matchesType = typeF === 'all' || r.type === typeF;
+    return matchesQ && matchesStatus && matchesType;
+  });
+
+  document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
+
+  const stampLabel = {clean: 'CLEAN', partial: 'PARTIAL', hack: 'HACK ONLY'};
+
+  document.getElementById('rows').innerHTML = filtered.map(r => `
+    <div class="row">
+      <div class="row-main">
+        <div class="row-name">${r.name}</div>
+        <div class="row-loc">${r.loc} · ${r.type === 'chain' ? 'National chain' : 'Independent'}${r.type === 'independent' ? (r.verified ? ' · <span class="verified-tag">✓ verified in person</span>' : ' · reported, unverified') : ''}</div>
+        <div class="row-note">${r.note}</div>
+        <div class="row-fat">${r.fat}</div>
+      </div>
+      <div class="stamp ${r.status}">${stampLabel[r.status]}</div>
+    </div>
+  `).join('') || '<p style="padding:20px 4px;color:var(--ink-soft);">Nothing matches that search.</p>';
+}
+
+render();
+</script>
+</body>
+</html>
