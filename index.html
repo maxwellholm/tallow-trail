@@ -11,9 +11,13 @@
 <meta property="og:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seedoilfree.io/">
+<meta property="og:image" content="https://seedoilfree.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Seed Oil Free Restaurants in NYC">
 <meta name="twitter:description" content="Hand-verified NYC spots that skip seed oils, plus chain order-hacks for everywhere else.">
+<meta name="twitter:image" content="https://seedoilfree.io/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -278,6 +282,7 @@
   <p class="sub">A hand-verified guide to restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
 
   <div class="filters">
+    <input id="zipFilter" type="text" placeholder="Zip code (optional)" inputmode="numeric" maxlength="5" oninput="render()">
     <select id="stateFilter" onchange="render()">
       <option value="all">All states</option>
       <option value="AL">Alabama</option>
@@ -375,6 +380,7 @@ function normalizeRow(row) {
     name: (row.name || "").trim(),
     loc: (row.loc || "").trim(),
     state: (row.state || "").trim().toUpperCase(),
+    zip: (row.zip || "").trim(),
     type: (row.type || "").trim().toLowerCase(),
     status: (row.status || "").trim().toLowerCase(),
     fat: (row.fat || "").trim(),
@@ -402,6 +408,39 @@ function loadData() {
 }
 
 function render() {
+  const zipF = document.getElementById('zipFilter').value.trim();
   const stateF = document.getElementById('stateFilter').value;
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
+
+  const filtered = data.filter(r => {
+    const matchesZip = !zipF || !r.zip || r.zip === zipF || r.zip.slice(0, 3) === zipF.slice(0, 3);
+    const matchesState = stateF === 'all' || r.state === stateF || r.state === 'ALL';
+    const matchesStatus = statusF === 'all' || r.status === statusF;
+    const matchesType = typeF === 'all' || r.type === typeF;
+    return matchesZip && matchesState && matchesStatus && matchesType;
+  });
+
+  document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
+
+  const pillLabel = {clean: 'CLEAN', partial: 'PARTIAL', hack: 'HACK ONLY'};
+
+  document.getElementById('rows').innerHTML = filtered.map(r => `
+    <div class="row">
+      <div class="row-icon">${r.icon || '🍽️'}</div>
+      <div class="row-main">
+        <div class="row-name">${r.name}</div>
+        <div class="row-loc">${r.loc}${r.zip ? ' ' + r.zip : ''} · ${r.type === 'chain' ? 'National chain' : 'Independent'}${r.type === 'independent' ? (r.verified ? ' · <span class="verified-tag">✓ verified in person</span>' : ' · reported, unverified') : ''}</div>
+        <div class="row-note">${r.note}</div>
+        <div class="row-fat">${r.fat}</div>
+        ${r.ig ? `<a class="ig-link" href="https://www.instagram.com/${r.ig}/" target="_blank" rel="noopener">📷 @${r.ig}</a>` : ''}
+      </div>
+      <div class="pill ${r.status}">${pillLabel[r.status]}</div>
+    </div>
+  `).join('') || '<p class="empty">Nothing matches that search.</p>';
+}
+
+loadData();
+</script>
+</body>
+</html>
