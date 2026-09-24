@@ -247,7 +247,59 @@
   <p class="sub">A hand-verified guide to restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
 
   <div class="filters">
-    <input id="search" type="text" placeholder="Search a name or city…" oninput="render()">
+    <select id="stateFilter" onchange="render()">
+      <option value="all">All states</option>
+      <option value="AL">Alabama</option>
+      <option value="AK">Alaska</option>
+      <option value="AZ">Arizona</option>
+      <option value="AR">Arkansas</option>
+      <option value="CA">California</option>
+      <option value="CO">Colorado</option>
+      <option value="CT">Connecticut</option>
+      <option value="DE">Delaware</option>
+      <option value="FL">Florida</option>
+      <option value="GA">Georgia</option>
+      <option value="HI">Hawaii</option>
+      <option value="ID">Idaho</option>
+      <option value="IL">Illinois</option>
+      <option value="IN">Indiana</option>
+      <option value="IA">Iowa</option>
+      <option value="KS">Kansas</option>
+      <option value="KY">Kentucky</option>
+      <option value="LA">Louisiana</option>
+      <option value="ME">Maine</option>
+      <option value="MD">Maryland</option>
+      <option value="MA">Massachusetts</option>
+      <option value="MI">Michigan</option>
+      <option value="MN">Minnesota</option>
+      <option value="MS">Mississippi</option>
+      <option value="MO">Missouri</option>
+      <option value="MT">Montana</option>
+      <option value="NE">Nebraska</option>
+      <option value="NV">Nevada</option>
+      <option value="NH">New Hampshire</option>
+      <option value="NJ">New Jersey</option>
+      <option value="NM">New Mexico</option>
+      <option value="NY">New York</option>
+      <option value="NC">North Carolina</option>
+      <option value="ND">North Dakota</option>
+      <option value="OH">Ohio</option>
+      <option value="OK">Oklahoma</option>
+      <option value="OR">Oregon</option>
+      <option value="PA">Pennsylvania</option>
+      <option value="RI">Rhode Island</option>
+      <option value="SC">South Carolina</option>
+      <option value="SD">South Dakota</option>
+      <option value="TN">Tennessee</option>
+      <option value="TX">Texas</option>
+      <option value="UT">Utah</option>
+      <option value="VT">Vermont</option>
+      <option value="VA">Virginia</option>
+      <option value="WA">Washington</option>
+      <option value="WV">West Virginia</option>
+      <option value="WI">Wisconsin</option>
+      <option value="WY">Wyoming</option>
+    </select>
     <select id="statusFilter" onchange="render()">
       <option value="all">All statuses</option>
       <option value="clean">Fully clean</option>
@@ -283,42 +335,42 @@
 
 <script>
 const data = [
-  {name:"Hearth", loc:"East Village, NY", type:"independent", status:"clean", fat:"Tallow, butter, ghee, pork lard", note:"Full kitchen runs on traditional fats. Reported — not yet visited.", verified:false, icon:"🐄", ig:"restauranthearth"},
-  {name:"Springbone Kitchen", loc:"Greenwich Village, NY", type:"independent", status:"clean", fat:"Bone broth kitchen, no seed oils", note:"Health-forward fast-casual, multiple NYC locations. Reported — not yet visited.", verified:false, icon:"🍲", ig:"springbonekitchen"},
-  {name:"True Food Kitchen", loc:"Multiple cities", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils.", icon:"🥬", ig:"truefoodkitchen"},
-  {name:"Woods Hill Pier 4", loc:"Boston, MA", type:"independent", status:"clean", fat:"Tallow, olive oil", note:"Sources fat directly from its own regenerative farm.", icon:"🐄", ig:"woodshillpier4"},
-  {name:"TownHall", loc:"Columbus, OH", type:"independent", status:"clean", fat:"Avocado, coconut, olive oil", note:"One of the first US restaurants to go fully seed-oil-free.", icon:"🥑", ig:"townhallcolumbus"},
-  {name:"Ron's Original Bar & Grille", loc:"Pennsylvania", type:"independent", status:"clean", fat:"Cold-pressed avocado oil, EVOO, ghee", note:"Completed a full switch away from seed oils menu-wide.", icon:"🥑", ig:"ronsoriginal"},
-  {name:"Sweetgreen", loc:"Nationwide", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings.", icon:"🥬", ig:"sweetgreen"},
-  {name:"Crisp & Green", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen.", icon:"🥬", ig:"crispandgreen"},
-  {name:"Elevation Burger", loc:"Multiple states", type:"chain", status:"clean", fat:"100% olive oil (fries)", note:"Grass-fed beef, fries fried in olive oil for years.", icon:"🍔", ig:"elevationburger"},
-  {name:"Blaze Pizza", loc:"Nationwide", type:"chain", status:"clean", fat:"Extra virgin olive oil", note:"EVOO on the dough, no fryer in the core pizza line.", icon:"🍕", ig:"blazepizza"},
-  {name:"CoreLife Eatery", loc:"Multiple states", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola.", icon:"🥬", ig:"corelifeeatery"},
-  {name:"The Publican", loc:"Chicago, IL", type:"independent", status:"partial", fat:"Tallow (mains), some seed oil elsewhere", note:"Nose-to-tail beer hall leaning on traditional fats for most dishes.", icon:"🐖", ig:"thepublicanchicago"},
-  {name:"Hawksmoor NYC", loc:"New York, NY", type:"independent", status:"partial", fat:"Butter, beef fat (steakhouse)", note:"British steakhouse import — verify current fryer oil locally.", icon:"🧈", ig:"hawksmoornyc"},
-  {name:"Steak 'n Shake", loc:"Nationwide", type:"chain", status:"partial", fat:"100% beef tallow (fries, tots, onion rings, tenders)", note:"Fryer is fully tallow; confirm other menu items separately.", icon:"🐄", ig:"steaknshake"},
-  {name:"Buffalo Wild Wings", loc:"Nationwide", type:"chain", status:"partial", fat:"Tallow (bone-in wings only)", note:"Order bone-in dry-rub wings; boneless and sides still hit the seed-oil fryer.", icon:"🍗", ig:"buffalowildwings"},
-  {name:"Hopdoddy Burger Bar", loc:"Multiple states", type:"chain", status:"partial", fat:"Tallow (hand-cut fries)", note:"Fries are tallow-cooked; check burger toppings and sauces.", icon:"🍔", ig:"hopdoddyburgerbar"},
-  {name:"Outback Steakhouse", loc:"Nationwide", type:"chain", status:"partial", fat:"Butter (steaks) / seed oil (fryer)", note:"Order the steak, skip the Bloomin' Onion and other fried apps.", icon:"🧈", ig:"outback"},
-  {name:"Texas Roadhouse", loc:"Nationwide", type:"chain", status:"partial", fat:"Butter (steaks, rolls) / seed oil (fryer)", note:"Steak and the famous rolls are clean; fried appetizers aren't.", icon:"🧈", ig:"texasroadhouse"},
-  {name:"El Pollo Loco", loc:"Western US", type:"chain", status:"partial", fat:"Fire-grilled (clean) / seed oil (sides)", note:"Fire-grilled chicken itself is the clean order; tortillas and sides vary.", icon:"🔥", ig:"elpolloloco"},
-  {name:"Chipotle", loc:"Nationwide", type:"chain", status:"hack", fat:"Rice bran / soybean oil on the plancha; sunflower oil for chips", note:"Order carnitas (slow-cooked, not plancha-seared) over rice, beans, salsa, guac. Skip the chips and any plancha-seared protein.", icon:"🌯", ig:"chipotle"},
-  {name:"Five Guys", loc:"Nationwide", type:"chain", status:"hack", fat:"100% peanut oil (fryer)", note:"Peanut oil isn't a seed oil but is moderate-PUFA — burgers are griddled clean if you skip fries and mayo.", icon:"🥜", ig:"fiveguys"},
-  {name:"Chick-fil-A", loc:"Nationwide", type:"chain", status:"hack", fat:"Peanut oil (chicken) / canola blend (waffle fries)", note:"Peanut-oil chicken is the better order; the waffle fries run on a canola blend.", icon:"🥜", ig:"chickfila"},
-  {name:"In-N-Out", loc:"Western US", type:"chain", status:"hack", fat:"100% sunflower oil (fries)", note:"Reputation doesn't match reality — fries are high-PUFA sunflower oil. Burger patty itself is griddled with no added oil.", icon:"🌻", ig:"innout"},
-  {name:"Dunkin' / Krispy Kreme", loc:"Nationwide", type:"chain", status:"hack", fat:"Palm shortening (fryer)", note:"Reverse gotcha — donut fryers usually run palm shortening, which is low-PUFA regardless of what else you think about donuts.", icon:"🍩", ig:"dunkin"},
+  {name:"Hearth", loc:"East Village, NY", state:"NY", type:"independent", status:"clean", fat:"Tallow, butter, ghee, pork lard", note:"Full kitchen runs on traditional fats. Reported — not yet visited.", verified:false, icon:"🐄", ig:"restauranthearth"},
+  {name:"Springbone Kitchen", loc:"Greenwich Village, NY", state:"NY", type:"independent", status:"clean", fat:"Bone broth kitchen, no seed oils", note:"Health-forward fast-casual, multiple NYC locations. Reported — not yet visited.", verified:false, icon:"🍲", ig:"springbonekitchen"},
+  {name:"True Food Kitchen", loc:"Multiple cities", state:"ALL", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils.", icon:"🥬", ig:"truefoodkitchen"},
+  {name:"Woods Hill Pier 4", loc:"Boston, MA", state:"MA", type:"independent", status:"clean", fat:"Tallow, olive oil", note:"Sources fat directly from its own regenerative farm.", icon:"🐄", ig:"woodshillpier4"},
+  {name:"TownHall", loc:"Columbus, OH", state:"OH", type:"independent", status:"clean", fat:"Avocado, coconut, olive oil", note:"One of the first US restaurants to go fully seed-oil-free.", icon:"🥑", ig:"townhallcolumbus"},
+  {name:"Ron's Original Bar & Grille", loc:"Pennsylvania", state:"PA", type:"independent", status:"clean", fat:"Cold-pressed avocado oil, EVOO, ghee", note:"Completed a full switch away from seed oils menu-wide.", icon:"🥑", ig:"ronsoriginal"},
+  {name:"Sweetgreen", loc:"Nationwide", state:"ALL", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings.", icon:"🥬", ig:"sweetgreen"},
+  {name:"Crisp & Green", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen.", icon:"🥬", ig:"crispandgreen"},
+  {name:"Elevation Burger", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"100% olive oil (fries)", note:"Grass-fed beef, fries fried in olive oil for years.", icon:"🍔", ig:"elevationburger"},
+  {name:"Blaze Pizza", loc:"Nationwide", state:"ALL", type:"chain", status:"clean", fat:"Extra virgin olive oil", note:"EVOO on the dough, no fryer in the core pizza line.", icon:"🍕", ig:"blazepizza"},
+  {name:"CoreLife Eatery", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola.", icon:"🥬", ig:"corelifeeatery"},
+  {name:"The Publican", loc:"Chicago, IL", state:"IL", type:"independent", status:"partial", fat:"Tallow (mains), some seed oil elsewhere", note:"Nose-to-tail beer hall leaning on traditional fats for most dishes.", icon:"🐖", ig:"thepublicanchicago"},
+  {name:"Hawksmoor NYC", loc:"New York, NY", state:"NY", type:"independent", status:"partial", fat:"Butter, beef fat (steakhouse)", note:"British steakhouse import — verify current fryer oil locally.", icon:"🧈", ig:"hawksmoornyc"},
+  {name:"Steak 'n Shake", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"100% beef tallow (fries, tots, onion rings, tenders)", note:"Fryer is fully tallow; confirm other menu items separately.", icon:"🐄", ig:"steaknshake"},
+  {name:"Buffalo Wild Wings", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Tallow (bone-in wings only)", note:"Order bone-in dry-rub wings; boneless and sides still hit the seed-oil fryer.", icon:"🍗", ig:"buffalowildwings"},
+  {name:"Hopdoddy Burger Bar", loc:"Multiple states", state:"ALL", type:"chain", status:"partial", fat:"Tallow (hand-cut fries)", note:"Fries are tallow-cooked; check burger toppings and sauces.", icon:"🍔", ig:"hopdoddyburgerbar"},
+  {name:"Outback Steakhouse", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Butter (steaks) / seed oil (fryer)", note:"Order the steak, skip the Bloomin' Onion and other fried apps.", icon:"🧈", ig:"outback"},
+  {name:"Texas Roadhouse", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Butter (steaks, rolls) / seed oil (fryer)", note:"Steak and the famous rolls are clean; fried appetizers aren't.", icon:"🧈", ig:"texasroadhouse"},
+  {name:"El Pollo Loco", loc:"Western US", state:"ALL", type:"chain", status:"partial", fat:"Fire-grilled (clean) / seed oil (sides)", note:"Fire-grilled chicken itself is the clean order; tortillas and sides vary.", icon:"🔥", ig:"elpolloloco"},
+  {name:"Chipotle", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Rice bran / soybean oil on the plancha; sunflower oil for chips", note:"Order carnitas (slow-cooked, not plancha-seared) over rice, beans, salsa, guac. Skip the chips and any plancha-seared protein.", icon:"🌯", ig:"chipotle"},
+  {name:"Five Guys", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"100% peanut oil (fryer)", note:"Peanut oil isn't a seed oil but is moderate-PUFA — burgers are griddled clean if you skip fries and mayo.", icon:"🥜", ig:"fiveguys"},
+  {name:"Chick-fil-A", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Peanut oil (chicken) / canola blend (waffle fries)", note:"Peanut-oil chicken is the better order; the waffle fries run on a canola blend.", icon:"🥜", ig:"chickfila"},
+  {name:"In-N-Out", loc:"Western US", state:"ALL", type:"chain", status:"hack", fat:"100% sunflower oil (fries)", note:"Reputation doesn't match reality — fries are high-PUFA sunflower oil. Burger patty itself is griddled with no added oil.", icon:"🌻", ig:"innout"},
+  {name:"Dunkin' / Krispy Kreme", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Palm shortening (fryer)", note:"Reverse gotcha — donut fryers usually run palm shortening, which is low-PUFA regardless of what else you think about donuts.", icon:"🍩", ig:"dunkin"},
 ];
 
 function render() {
-  const q = document.getElementById('search').value.toLowerCase();
+  const stateF = document.getElementById('stateFilter').value;
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
 
   const filtered = data.filter(r => {
-    const matchesQ = !q || r.name.toLowerCase().includes(q) || r.loc.toLowerCase().includes(q);
+    const matchesState = stateF === 'all' || r.state === stateF || r.state === 'ALL';
     const matchesStatus = statusF === 'all' || r.status === statusF;
     const matchesType = typeF === 'all' || r.type === typeF;
-    return matchesQ && matchesStatus && matchesType;
+    return matchesState && matchesStatus && matchesType;
   });
 
   document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
