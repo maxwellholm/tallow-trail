@@ -364,66 +364,44 @@
   </section>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script>
-const data = [
-  {name:"Hearth", loc:"East Village, NY", state:"NY", type:"independent", status:"clean", fat:"Tallow, butter, ghee, pork lard", note:"Full kitchen runs on traditional fats. Reported — not yet visited.", verified:false, icon:"🐄", ig:"restauranthearth"},
-  {name:"Springbone Kitchen", loc:"Greenwich Village, NY", state:"NY", type:"independent", status:"clean", fat:"Bone broth kitchen, no seed oils", note:"Health-forward fast-casual, multiple NYC locations. Reported — not yet visited.", verified:false, icon:"🍲", ig:"springbonekitchen"},
-  {name:"True Food Kitchen", loc:"Multiple cities", state:"ALL", type:"chain", status:"clean", fat:"Extra virgin olive oil, avocado oil", note:"Scratch kitchen chain, olive/avocado oil only — no fryer seed oils.", icon:"🥬", ig:"truefoodkitchen"},
-  {name:"Woods Hill Pier 4", loc:"Boston, MA", state:"MA", type:"independent", status:"clean", fat:"Tallow, olive oil", note:"Sources fat directly from its own regenerative farm.", icon:"🐄", ig:"woodshillpier4"},
-  {name:"TownHall", loc:"Columbus, OH", state:"OH", type:"independent", status:"clean", fat:"Avocado, coconut, olive oil", note:"One of the first US restaurants to go fully seed-oil-free.", icon:"🥑", ig:"townhallcolumbus"},
-  {name:"Ron's Original Bar & Grille", loc:"Pennsylvania", state:"PA", type:"independent", status:"clean", fat:"Cold-pressed avocado oil, EVOO, ghee", note:"Completed a full switch away from seed oils menu-wide.", icon:"🥑", ig:"ronsoriginal"},
-  {name:"Sweetgreen", loc:"Nationwide", state:"ALL", type:"chain", status:"clean", fat:"Organic EVOO, avocado oil", note:"Rolled out olive/avocado oil chain-wide for roasting and dressings.", icon:"🥬", ig:"sweetgreen"},
-  {name:"Crisp & Green", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"Olive oil", note:"Bowl chain built on an olive-oil kitchen.", icon:"🥬", ig:"crispandgreen"},
-  {name:"Elevation Burger", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"100% olive oil (fries)", note:"Grass-fed beef, fries fried in olive oil for years.", icon:"🍔", ig:"elevationburger"},
-  {name:"Blaze Pizza", loc:"Nationwide", state:"ALL", type:"chain", status:"clean", fat:"Extra virgin olive oil", note:"EVOO on the dough, no fryer in the core pizza line.", icon:"🍕", ig:"blazepizza"},
-  {name:"CoreLife Eatery", loc:"Multiple states", state:"ALL", type:"chain", status:"clean", fat:"Olive oil", note:"Bowls and broths built on olive oil rather than canola.", icon:"🥬", ig:"corelifeeatery"},
-  {name:"The Publican", loc:"Chicago, IL", state:"IL", type:"independent", status:"partial", fat:"Tallow (mains), some seed oil elsewhere", note:"Nose-to-tail beer hall leaning on traditional fats for most dishes.", icon:"🐖", ig:"thepublicanchicago"},
-  {name:"Hawksmoor NYC", loc:"New York, NY", state:"NY", type:"independent", status:"partial", fat:"Butter, beef fat (steakhouse)", note:"British steakhouse import — verify current fryer oil locally.", icon:"🧈", ig:"hawksmoornyc"},
-  {name:"Steak 'n Shake", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"100% beef tallow (fries, tots, onion rings, tenders)", note:"Fryer is fully tallow; confirm other menu items separately.", icon:"🐄", ig:"steaknshake"},
-  {name:"Buffalo Wild Wings", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Tallow (bone-in wings only)", note:"Order bone-in dry-rub wings; boneless and sides still hit the seed-oil fryer.", icon:"🍗", ig:"buffalowildwings"},
-  {name:"Hopdoddy Burger Bar", loc:"Multiple states", state:"ALL", type:"chain", status:"partial", fat:"Tallow (hand-cut fries)", note:"Fries are tallow-cooked; check burger toppings and sauces.", icon:"🍔", ig:"hopdoddyburgerbar"},
-  {name:"Outback Steakhouse", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Butter (steaks) / seed oil (fryer)", note:"Order the steak, skip the Bloomin' Onion and other fried apps.", icon:"🧈", ig:"outback"},
-  {name:"Texas Roadhouse", loc:"Nationwide", state:"ALL", type:"chain", status:"partial", fat:"Butter (steaks, rolls) / seed oil (fryer)", note:"Steak and the famous rolls are clean; fried appetizers aren't.", icon:"🧈", ig:"texasroadhouse"},
-  {name:"El Pollo Loco", loc:"Western US", state:"ALL", type:"chain", status:"partial", fat:"Fire-grilled (clean) / seed oil (sides)", note:"Fire-grilled chicken itself is the clean order; tortillas and sides vary.", icon:"🔥", ig:"elpolloloco"},
-  {name:"Chipotle", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Rice bran / soybean oil on the plancha; sunflower oil for chips", note:"Order carnitas (slow-cooked, not plancha-seared) over rice, beans, salsa, guac. Skip the chips and any plancha-seared protein.", icon:"🌯", ig:"chipotle"},
-  {name:"Five Guys", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"100% peanut oil (fryer)", note:"Peanut oil isn't a seed oil but is moderate-PUFA — burgers are griddled clean if you skip fries and mayo.", icon:"🥜", ig:"fiveguys"},
-  {name:"Chick-fil-A", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Peanut oil (chicken) / canola blend (waffle fries)", note:"Peanut-oil chicken is the better order; the waffle fries run on a canola blend.", icon:"🥜", ig:"chickfila"},
-  {name:"In-N-Out", loc:"Western US", state:"ALL", type:"chain", status:"hack", fat:"100% sunflower oil (fries)", note:"Reputation doesn't match reality — fries are high-PUFA sunflower oil. Burger patty itself is griddled with no added oil.", icon:"🌻", ig:"innout"},
-  {name:"Dunkin' / Krispy Kreme", loc:"Nationwide", state:"ALL", type:"chain", status:"hack", fat:"Palm shortening (fryer)", note:"Reverse gotcha — donut fryers usually run palm shortening, which is low-PUFA regardless of what else you think about donuts.", icon:"🍩", ig:"dunkin"},
-];
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1VwLSUnUr4woOeSV9fr-JnwulhGOWwYgOZXzH4w0zo6c/gviz/tq?tqx=out:csv&sheet=Live";
+
+let data = [];
+
+function normalizeRow(row) {
+  return {
+    name: (row.name || "").trim(),
+    loc: (row.loc || "").trim(),
+    state: (row.state || "").trim().toUpperCase(),
+    type: (row.type || "").trim().toLowerCase(),
+    status: (row.status || "").trim().toLowerCase(),
+    fat: (row.fat || "").trim(),
+    note: (row.note || "").trim(),
+    verified: /^true$/i.test((row.verified || "").trim()),
+    icon: (row.icon || "").trim() || "🍽️",
+    ig: (row.ig || "").trim() || null,
+  };
+}
+
+function loadData() {
+  document.getElementById('rows').innerHTML = '<p class="empty">Loading restaurants…</p>';
+  Papa.parse(CSV_URL, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      data = results.data.map(normalizeRow).filter(r => r.name);
+      render();
+    },
+    error: function() {
+      document.getElementById('rows').innerHTML = '<p class="empty">Couldn\'t load the restaurant list right now — try refreshing in a moment.</p>';
+    }
+  });
+}
 
 function render() {
   const stateF = document.getElementById('stateFilter').value;
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
-
-  const filtered = data.filter(r => {
-    const matchesState = stateF === 'all' || r.state === stateF || r.state === 'ALL';
-    const matchesStatus = statusF === 'all' || r.status === statusF;
-    const matchesType = typeF === 'all' || r.type === typeF;
-    return matchesState && matchesStatus && matchesType;
-  });
-
-  document.getElementById('count').textContent = filtered.length + ' of ' + data.length + ' listings';
-
-  const pillLabel = {clean: 'CLEAN', partial: 'PARTIAL', hack: 'HACK ONLY'};
-
-  document.getElementById('rows').innerHTML = filtered.map(r => `
-    <div class="row">
-      <div class="row-icon">${r.icon || '🍽️'}</div>
-      <div class="row-main">
-        <div class="row-name">${r.name}</div>
-        <div class="row-loc">${r.loc} · ${r.type === 'chain' ? 'National chain' : 'Independent'}${r.type === 'independent' ? (r.verified ? ' · <span class="verified-tag">✓ verified in person</span>' : ' · reported, unverified') : ''}</div>
-        <div class="row-note">${r.note}</div>
-        <div class="row-fat">${r.fat}</div>
-        ${r.ig ? `<a class="ig-link" href="https://www.instagram.com/${r.ig}/" target="_blank" rel="noopener">📷 @${r.ig}</a>` : ''}
-      </div>
-      <div class="pill ${r.status}">${pillLabel[r.status]}</div>
-    </div>
-  `).join('') || '<p class="empty">Nothing matches that search.</p>';
-}
-
-render();
-</script>
-</body>
-</html>
