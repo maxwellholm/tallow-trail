@@ -168,9 +168,27 @@
   }
   .header-right {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .header-right-top {
+    display: flex;
     align-items: center;
     gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
+  .top-submit-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--sage);
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    white-space: nowrap;
+  }
+  .top-submit-link:hover { color: var(--sage); opacity: 0.8; }
   .share-btn {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
@@ -396,8 +414,11 @@
       <h1>Seedoilfree</h1>
     </div>
     <div class="header-right">
-      <div class="tagline">NYC · hand-verified</div>
-      <button class="share-btn" onclick="shareSite()" id="shareBtn">Share ↗</button>
+      <div class="header-right-top">
+        <div class="tagline">NYC · hand-verified</div>
+        <button class="share-btn" onclick="shareSite()" id="shareBtn">Share ↗</button>
+      </div>
+      <a class="top-submit-link" href="https://docs.google.com/forms/d/e/1FAIpQLScsp772u4Dn8vuZAyEnDB0y6Jvti7MJqHUeB5YC0RHwp_Le4Q/viewform?usp=sharing" target="_blank">Restaurant Submission Form</a>
     </div>
   </header>
   <p class="sub">A hand-verified guide to restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
