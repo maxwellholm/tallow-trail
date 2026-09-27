@@ -165,6 +165,37 @@
     font-size: 12px;
     color: var(--ink-soft);
   }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .share-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sage);
+    background: var(--sage-soft);
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-btn.copied { background: var(--sage); color: #fff; }
+  .new-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--coral);
+    background: var(--coral-soft);
+    border-radius: 5px;
+    padding: 2px 6px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
   .sub { color: var(--ink-soft); font-size: 15.5px; max-width: 54ch; margin: 16px 0 0; line-height: 1.55; }
 
   .filters {
@@ -316,6 +347,21 @@
   }
   .submit-box a:hover { opacity: 0.9; }
 
+  .report-issue {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 18px 0 0;
+    line-height: 1.6;
+  }
+  .report-issue a {
+    color: var(--sage);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .report-issue a:hover { text-decoration: underline; }
+
   .legend {
     display: flex;
     gap: 18px;
@@ -348,7 +394,10 @@
       </svg>
       <h1>Seedoilfree</h1>
     </div>
-    <div class="tagline">NYC · hand-verified</div>
+    <div class="header-right">
+      <div class="tagline">NYC · hand-verified</div>
+      <button class="share-btn" onclick="shareSite()" id="shareBtn">Share ↗</button>
+    </div>
   </header>
   <p class="sub">A hand-verified guide to restaurants that cook with tallow, butter, olive oil, and other traditional fats — plus how to order clean at the national chains, wherever you are.</p>
 
@@ -406,6 +455,12 @@
       <option value="WI">Wisconsin</option>
       <option value="WY">Wyoming</option>
     </select>
+    <select id="areaFilter" onchange="applyFilters()">
+      <option value="all">All NYC areas</option>
+      <option value="manhattan">Manhattan</option>
+      <option value="brooklyn">Brooklyn</option>
+      <option value="queens">Queens</option>
+    </select>
     <select id="statusFilter" onchange="applyFilters()">
       <option value="all">All statuses</option>
       <option value="clean">Fully clean</option>
@@ -426,7 +481,7 @@
 
   <div class="rows" id="rows">
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🥬</div>
       <div class="row-main">
         <div class="row-name">Rooted</div>
@@ -437,7 +492,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🐄</div>
       <div class="row-main">
         <div class="row-name">Hearth</div>
@@ -449,7 +504,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍲</div>
       <div class="row-main">
         <div class="row-name">Springbone Kitchen</div>
@@ -461,7 +516,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🥬</div>
       <div class="row-main">
         <div class="row-name">True Food Kitchen</div>
@@ -473,7 +528,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="MA" data-status="clean" data-type="independent">
+    <div class="row" data-state="MA" data-status="clean" data-type="independent" data-area="ALL">
       <div class="row-icon">🐄</div>
       <div class="row-main">
         <div class="row-name">Woods Hill Pier 4</div>
@@ -485,7 +540,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="OH" data-status="clean" data-type="independent">
+    <div class="row" data-state="OH" data-status="clean" data-type="independent" data-area="ALL">
       <div class="row-icon">🥑</div>
       <div class="row-main">
         <div class="row-name">TownHall</div>
@@ -497,7 +552,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="PA" data-status="clean" data-type="independent">
+    <div class="row" data-state="PA" data-status="clean" data-type="independent" data-area="ALL">
       <div class="row-icon">🥑</div>
       <div class="row-main">
         <div class="row-name">Ron's Original Bar & Grille</div>
@@ -509,10 +564,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍔</div>
       <div class="row-main">
-        <div class="row-name">BURGERHEAD</div>
+        <div class="row-name">BURGERHEAD <span class="new-badge">NEW</span></div>
         <div class="row-loc">West Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Multiple reviews cite tallow fries and a seed-oil-free approach. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow (fries, burgers)</div>
@@ -520,10 +575,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🧈</div>
       <div class="row-main">
-        <div class="row-name">4 Charles Prime Rib</div>
+        <div class="row-name">4 Charles Prime Rib <span class="new-badge">NEW</span></div>
         <div class="row-loc">West Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com as beef tallow, butter, ghee, and pork lard. Notoriously hard reservation. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow, butter, ghee, pork lard</div>
@@ -531,10 +586,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🧈</div>
       <div class="row-main">
-        <div class="row-name">COTE Korean Steakhouse</div>
+        <div class="row-name">COTE Korean Steakhouse <span class="new-badge">NEW</span></div>
         <div class="row-loc">Flatiron, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com as butter and ghee. High-end Korean steakhouse. Reported — not yet visited.</div>
         <div class="row-fat">Butter, ghee</div>
@@ -542,10 +597,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="queens">
       <div class="row-icon">🫓</div>
       <div class="row-main">
-        <div class="row-name">Saffron Indian Cuisine</div>
+        <div class="row-name">Saffron Indian Cuisine <span class="new-badge">NEW</span></div>
         <div class="row-loc">Astoria, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com as beef tallow, butter, olive oil, and avocado oil. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow, butter, olive oil, avocado oil</div>
@@ -553,10 +608,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="queens">
       <div class="row-icon">🍕</div>
       <div class="row-main">
-        <div class="row-name">Alba's Pizza & Restaurant</div>
+        <div class="row-name">Alba's Pizza & Restaurant <span class="new-badge">NEW</span></div>
         <div class="row-loc">Astoria, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com as beef tallow and olive oil. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow, olive oil</div>
@@ -564,10 +619,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🐄</div>
       <div class="row-main">
-        <div class="row-name">Daddies</div>
+        <div class="row-name">Daddies <span class="new-badge">NEW</span></div>
         <div class="row-loc">West Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Cited alongside Hearth for using beef tallow and olive oil. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow, olive oil</div>
@@ -575,10 +630,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍦</div>
       <div class="row-main">
-        <div class="row-name">goodsugar</div>
+        <div class="row-name">goodsugar <span class="new-badge">NEW</span></div>
         <div class="row-loc">Upper East Side, NY · Independent · reported, unverified</div>
         <div class="row-note">Vegan, no refined sugar, reported as fully seed-oil-free certified. Reported — not yet visited.</div>
         <div class="row-fat">Reported fully seed-oil-free</div>
@@ -586,10 +641,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍔</div>
       <div class="row-main">
-        <div class="row-name">7th Street Burger</div>
+        <div class="row-name">7th Street Burger <span class="new-badge">NEW</span></div>
         <div class="row-loc">East Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Shows up on Yelp's "Best Beef Tallow Fries in NYC" list. Simple burger-and-fries menu. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow (fries)</div>
@@ -597,10 +652,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍔</div>
       <div class="row-main">
-        <div class="row-name">NADC Burger</div>
+        <div class="row-name">NADC Burger <span class="new-badge">NEW</span></div>
         <div class="row-loc">Nolita, NY · Independent · reported, unverified</div>
         <div class="row-note">Multiple reviews specifically confirm fries cooked in beef tallow. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow (fries)</div>
@@ -608,10 +663,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🥑</div>
       <div class="row-main">
-        <div class="row-name">SAVO</div>
+        <div class="row-name">SAVO <span class="new-badge">NEW</span></div>
         <div class="row-loc">Sunset Park, Brooklyn, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com as 100% seed-oil-free. Health-forward bowls, salads, and grilled proteins. Reported — not yet visited.</div>
         <div class="row-fat">Reported fully seed-oil-free</div>
@@ -619,10 +674,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🍕</div>
       <div class="row-main">
-        <div class="row-name">Lucali</div>
+        <div class="row-name">Lucali <span class="new-badge">NEW</span></div>
         <div class="row-loc">Carroll Gardens, Brooklyn, NY · Independent · reported, unverified</div>
         <div class="row-note">Iconic Brooklyn pizzeria — confirmed seed-oil-safe (olive oil and butter only) by a curated NYC health guide. Cash only, famously long waits. Reported — not yet visited.</div>
         <div class="row-fat">Olive oil, butter</div>
@@ -630,10 +685,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🍕</div>
       <div class="row-main">
-        <div class="row-name">Juliana's</div>
+        <div class="row-name">Juliana's <span class="new-badge">NEW</span></div>
         <div class="row-loc">DUMBO, Brooklyn, NY · Independent · reported, unverified</div>
         <div class="row-note">Legendary coal-oven pizzeria under the Brooklyn Bridge — confirmed seed-oil-safe (olive oil and butter only) by a curated NYC health guide. Reported — not yet visited.</div>
         <div class="row-fat">Olive oil, butter</div>
@@ -641,10 +696,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🥙</div>
       <div class="row-main">
-        <div class="row-name">King Souvlaki</div>
+        <div class="row-name">King Souvlaki <span class="new-badge">NEW</span></div>
         <div class="row-loc">Bay Ridge, Brooklyn, NY · Independent · reported, unverified</div>
         <div class="row-note">Listed on LocalFats.com's Brooklyn directory. Specific fats not yet confirmed. Reported — not yet visited.</div>
         <div class="row-fat">Details unconfirmed</div>
@@ -652,10 +707,10 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="clean" data-type="independent">
+    <div class="row" data-state="NY" data-status="clean" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍝</div>
       <div class="row-main">
-        <div class="row-name">Lil' Frankie's</div>
+        <div class="row-name">Lil' Frankie's <span class="new-badge">NEW</span></div>
         <div class="row-loc">East Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Part of the Frank Prisinzano restaurant group — reportedly grass-fed butter and EVOO, avoid fried items. Cash only. Reported — not yet visited.</div>
         <div class="row-fat">Grass-fed butter, EVOO (avoid fryer items)</div>
@@ -663,7 +718,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🥬</div>
       <div class="row-main">
         <div class="row-name">Sweetgreen</div>
@@ -675,7 +730,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🥬</div>
       <div class="row-main">
         <div class="row-name">Crisp & Green</div>
@@ -687,7 +742,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🍔</div>
       <div class="row-main">
         <div class="row-name">Elevation Burger</div>
@@ -699,7 +754,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🍕</div>
       <div class="row-main">
         <div class="row-name">Blaze Pizza</div>
@@ -711,7 +766,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="clean" data-type="chain">
+    <div class="row" data-state="ALL" data-status="clean" data-type="chain" data-area="ALL">
       <div class="row-icon">🥬</div>
       <div class="row-main">
         <div class="row-name">CoreLife Eatery</div>
@@ -723,7 +778,7 @@
       <div class="pill clean">CLEAN</div>
     </div>
 
-    <div class="row" data-state="IL" data-status="partial" data-type="independent">
+    <div class="row" data-state="IL" data-status="partial" data-type="independent" data-area="ALL">
       <div class="row-icon">🐖</div>
       <div class="row-main">
         <div class="row-name">The Publican</div>
@@ -735,7 +790,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="partial" data-type="independent">
+    <div class="row" data-state="NY" data-status="partial" data-type="independent" data-area="manhattan">
       <div class="row-icon">🧈</div>
       <div class="row-main">
         <div class="row-name">Hawksmoor NYC</div>
@@ -747,10 +802,10 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="partial" data-type="independent">
+    <div class="row" data-state="NY" data-status="partial" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍺</div>
       <div class="row-main">
-        <div class="row-name">Pubkey</div>
+        <div class="row-name">Pubkey <span class="new-badge">NEW</span></div>
         <div class="row-loc">West Village, NY · Independent · reported, unverified</div>
         <div class="row-note">Multiple reviews specifically mention burgers and fries cooked in beef tallow. Bar menu, so other items likely vary. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow (fries, burgers)</div>
@@ -758,10 +813,10 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="partial" data-type="independent">
+    <div class="row" data-state="NY" data-status="partial" data-type="independent" data-area="manhattan">
       <div class="row-icon">🥙</div>
       <div class="row-main">
-        <div class="row-name">Tony Dragon's Grille</div>
+        <div class="row-name">Tony Dragon's Grille <span class="new-badge">NEW</span></div>
         <div class="row-loc">Upper East Side, NY · Independent · reported, unverified</div>
         <div class="row-note">Greek/Mediterranean grill cart near Central Park. Listed on LocalFats.com — specific fats used not yet confirmed. Reported — not yet visited.</div>
         <div class="row-fat">Details unconfirmed</div>
@@ -769,10 +824,10 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="partial" data-type="independent">
+    <div class="row" data-state="NY" data-status="partial" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🍸</div>
       <div class="row-main">
-        <div class="row-name">The Binc</div>
+        <div class="row-name">The Binc <span class="new-badge">NEW</span></div>
         <div class="row-loc">Brooklyn Heights, NY · Independent · reported, unverified</div>
         <div class="row-note">Cocktail bar — reportedly the fries on their steak frites are the only tallow-cooked item on the menu. Reported — not yet visited.</div>
         <div class="row-fat">Beef tallow (steak frites fries only)</div>
@@ -780,10 +835,10 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="partial" data-type="independent">
+    <div class="row" data-state="NY" data-status="partial" data-type="independent" data-area="brooklyn">
       <div class="row-icon">🍷</div>
       <div class="row-main">
-        <div class="row-name">Liar Liar</div>
+        <div class="row-name">Liar Liar <span class="new-badge">NEW</span></div>
         <div class="row-loc">Boerum Hill, NY · Independent · reported, unverified</div>
         <div class="row-note">Wine bar known for steak frites. Fat used for the fries not yet confirmed. Reported — not yet visited.</div>
         <div class="row-fat">Details unconfirmed</div>
@@ -791,7 +846,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🐄</div>
       <div class="row-main">
         <div class="row-name">Steak 'n Shake</div>
@@ -803,7 +858,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🍗</div>
       <div class="row-main">
         <div class="row-name">Buffalo Wild Wings</div>
@@ -815,7 +870,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🍔</div>
       <div class="row-main">
         <div class="row-name">Hopdoddy Burger Bar</div>
@@ -827,7 +882,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🧈</div>
       <div class="row-main">
         <div class="row-name">Outback Steakhouse</div>
@@ -839,7 +894,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🧈</div>
       <div class="row-main">
         <div class="row-name">Texas Roadhouse</div>
@@ -851,7 +906,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🔥</div>
       <div class="row-main">
         <div class="row-name">El Pollo Loco</div>
@@ -863,10 +918,10 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="NY" data-status="hack" data-type="independent">
+    <div class="row" data-state="NY" data-status="hack" data-type="independent" data-area="manhattan">
       <div class="row-icon">🍗</div>
       <div class="row-main">
-        <div class="row-name">COQODAQ</div>
+        <div class="row-name">COQODAQ <span class="new-badge">NEW</span></div>
         <div class="row-loc">Flatiron, NY · Independent · reported, unverified</div>
         <div class="row-note">Reported to cook fried items (fried chicken, fries, squash) in seed oil. Non-fried menu items may be a safer order. Reported — not yet visited.</div>
         <div class="row-fat">Seed oil (fryer) — avoid fried items</div>
@@ -874,10 +929,10 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="partial" data-type="chain">
+    <div class="row" data-state="ALL" data-status="partial" data-type="chain" data-area="ALL">
       <div class="row-icon">🍗</div>
       <div class="row-main">
-        <div class="row-name">Culver's</div>
+        <div class="row-name">Culver's <span class="new-badge">NEW</span></div>
         <div class="row-loc">Midwest, expanding nationwide · National chain</div>
         <div class="row-note">Wood-fired rotisserie chicken uses chicken fat. Butter burgers use real butter. Fryer oil for other items not yet confirmed.</div>
         <div class="row-fat">Chicken fat (rotisserie), butter (burgers)</div>
@@ -885,7 +940,7 @@
       <div class="pill partial">PARTIAL</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🌯</div>
       <div class="row-main">
         <div class="row-name">Chipotle</div>
@@ -897,7 +952,7 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🥜</div>
       <div class="row-main">
         <div class="row-name">Five Guys</div>
@@ -909,10 +964,10 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🥪</div>
       <div class="row-main">
-        <div class="row-name">Penn Station East Coast Subs</div>
+        <div class="row-name">Penn Station East Coast Subs <span class="new-badge">NEW</span></div>
         <div class="row-loc">Nationwide · National chain</div>
         <div class="row-note">Fresh-cut fries use a peanut oil blend — not a seed oil, but moderate-PUFA. Sandwiches themselves are a safer bet.</div>
         <div class="row-fat">Peanut oil blend (fresh-cut fries)</div>
@@ -920,7 +975,7 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🥜</div>
       <div class="row-main">
         <div class="row-name">Chick-fil-A</div>
@@ -932,7 +987,7 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🌻</div>
       <div class="row-main">
         <div class="row-name">In-N-Out</div>
@@ -944,7 +999,7 @@
       <div class="pill hack">HACK ONLY</div>
     </div>
 
-    <div class="row" data-state="ALL" data-status="hack" data-type="chain">
+    <div class="row" data-state="ALL" data-status="hack" data-type="chain" data-area="ALL">
       <div class="row-icon">🍩</div>
       <div class="row-main">
         <div class="row-name">Dunkin' / Krispy Kreme</div>
@@ -978,11 +1033,39 @@
     <p>Tell us the name, neighborhood, and what oil they cook with — we verify NYC listings in person before they go live.</p>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLScsp772u4Dn8vuZAyEnDB0y6Jvti7MJqHUeB5YC0RHwp_Le4Q/viewform?usp=sharing" target="_blank">Verify or suggest a spot →</a>
   </section>
+
+  <p class="report-issue">
+    See something wrong — a spot that's closed, switched oils, or a detail that's off?
+    <a href="mailto:maxholm21@gmail.com?subject=SeedOilFree.io%20correction&body=Restaurant%20name%3A%0AWhat's%20wrong%3A%0AHow%20do%20you%20know%3A" target="_blank">Report an issue →</a>
+  </p>
 </div>
 
 <script>
+function shareSite() {
+  const shareData = {
+    title: 'SeedOilFree — hand-verified NYC restaurants',
+    text: 'A hand-verified guide to NYC restaurants that skip seed oils.',
+    url: 'https://seedoilfree.io/'
+  };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareData.url).then(() => {
+      const btn = document.getElementById('shareBtn');
+      const original = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+}
+
 function applyFilters() {
   const stateF = document.getElementById('stateFilter').value;
+  const areaF = document.getElementById('areaFilter').value;
   const statusF = document.getElementById('statusFilter').value;
   const typeF = document.getElementById('typeFilter').value;
   const rows = document.querySelectorAll('.row');
@@ -990,9 +1073,10 @@ function applyFilters() {
 
   rows.forEach(row => {
     const matchesState = stateF === 'all' || row.dataset.state === stateF || row.dataset.state === 'ALL';
+    const matchesArea = areaF === 'all' || row.dataset.area === areaF;
     const matchesStatus = statusF === 'all' || row.dataset.status === statusF;
     const matchesType = typeF === 'all' || row.dataset.type === typeF;
-    const show = matchesState && matchesStatus && matchesType;
+    const show = matchesState && matchesArea && matchesStatus && matchesType;
     row.classList.toggle('hidden', !show);
     if (show) visibleCount++;
   });
