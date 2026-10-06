@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://seedoilfree.io/sitemap.xml
+Sitemap: https://www.seedoilfree.io/sitemap.xml
