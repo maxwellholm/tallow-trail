@@ -95,6 +95,9 @@ def card(r, link=True):
     ig = f'<a class="ig-link" href="{e(r["ig_url"])}" target="_blank" rel="noopener">📷 {e(r["ig_handle"])}</a>' if r["ig_url"] else ""
     ver = ' · <span class="verified-tag">✓ verified in person</span>' if r["verified"] else ""
     loc = e(r["loc"].replace("✓ verified in person", "").rstrip(" ·"))
+    # a "clean" listing nobody has verified in person is shown as REPORTED, not CLEAN
+    reported = r["status"] == "clean" and not r["verified"] and r["type"] == "independent"
+    pill_cls, pill_txt = ("reported", "REPORTED") if reported else (r["status"], PILL[r["status"]])
     return f'''<div class="row">
   <div class="row-icon">{r["icon"]}</div>
   <div class="row-main">
@@ -104,7 +107,7 @@ def card(r, link=True):
     <div class="row-fat">{e(r["fat"])}</div>
     {ig}
   </div>
-  <div class="pill {r["status"]}">{PILL[r["status"]]}</div>
+  <div class="pill {pill_cls}">{pill_txt}</div>
 </div>'''
 
 
@@ -155,6 +158,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None):
 <style>{CSS}
   .crumbs {{ font-size: 13px; color: var(--ink-soft); margin: 0 0 14px; }}
   .crumbs a, .row-name a {{ color: inherit; }}
+  .pill.reported {{ background: var(--amber-soft); color: var(--amber); }}
   .navlinks a {{ display: inline-block; margin: 0 10px 8px 0; }}
 </style>
 </head>
@@ -318,6 +322,15 @@ if A in src:
     src = re.sub(re.escape(A) + ".*?" + re.escape(B), block.replace("\\", "\\\\"), src, flags=re.S)
 else:
     src = src.replace('<section class="submit-box">', block + '\n\n  <section class="submit-box">', 1)
+# unverified "clean" independents show REPORTED on the homepage too
+def _fix_home_pill(m):
+    blk = m.group(0)
+    if "reported, unverified" in blk:
+        blk = blk.replace('<div class="pill clean">CLEAN</div>', '<div class="pill reported">REPORTED</div>')
+    return blk
+src = pat.sub(_fix_home_pill, src)
+if ".pill.reported" not in src:
+    src = src.replace("  .pill.hack {", "  .pill.reported { background: var(--amber-soft); color: var(--amber); }\n  .pill.hack {", 1)
 (ROOT / "index.html").write_text(src, encoding="utf-8")
 
 print(f"{len(rows)} listings -> {len(urls)} URLs "
