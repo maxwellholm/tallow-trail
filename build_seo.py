@@ -262,7 +262,7 @@ for r in nyc:
          f"Is {r['name']} Seed Oil Free? ({r['hood']}, NYC) | SeedOilFree",
          f"{r['name']} in {r['hood']}, NYC: {r['fat']}. {status_line}",
          f"Is {r['name']} Seed Oil Free?",
-         f"{e(r['name'])} in {e(r['hood'])} {STATUS_TXT[r['status']]}. {status_line} Last checked {TODAY}.",
+         f"{e(r['name'])} in {e(r['hood'])} " + ("is reported to cook without seed oils" if r["status"] == "clean" and not r["verified"] else STATUS_TXT[r["status"]]) + f". {status_line} Last checked {TODAY}.",
          body,
          [rest_ld(r)],
          [("Home", "/"), (BOROUGHS.get(b, "NYC"), f"/nyc/{b}/"), (r["name"], path)],
