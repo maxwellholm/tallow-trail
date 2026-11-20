@@ -255,7 +255,7 @@ def labels_html():
             "<strong>PARTIAL</strong>: some items or the fryer still use seed oil. "
             "<strong>HACK ONLY</strong>: uses seed oils, but you can order around them. "
             "<strong>REPORTED</strong>: listed as seed-oil-free by public sources, not yet verified in person. "
-            "Kitchens change suppliers, so confirm with the restaurant before you go.</p></section>")
+            "Kitchens change suppliers, so confirm with the restaurant before you go. <a href=\"/how-we-verify/\">How we verify</a></p></section>")
 
 
 def nearby_html(h, b):
@@ -372,6 +372,30 @@ page("/chains/",
        "See the guides above. Statuses are Clean, Partial, or Hack only, and practices can vary by location.")])
 urls.append(("/chains/", "0.8"))
 
+
+# ---------- how we verify (facts: existing site copy + live counts) ----------
+n_ver = sum(r["verified"] for r in nyc)
+vp = "/how-we-verify/"
+verify_body = f"""<section class="info-section"><h2>What the labels mean</h2>
+<p><strong>Verified in person.</strong> SeedOilFree confirmed the listing in person. These carry a verified tag. Right now that is {n_ver} of {len(nyc)} NYC independent listings.</p>
+<p><strong>CLEAN</strong> means the restaurant cooks without seed oils. <strong>PARTIAL</strong> means some items or the fryer still use seed oil. <strong>HACK ONLY</strong> means it uses seed oils, but you can order around them.</p>
+<p><strong>REPORTED</strong> means the restaurant is listed as seed-oil-free by other sources but we have not confirmed it yet.</p></section>
+<section class="info-section"><h2>Where unverified listings come from</h2>
+<p>Reported listings come from other seed oil free directories, community posts, and press coverage. We show them because they can help you, and we label them so you know they are unconfirmed. Chain listings come from public databases and community reports, and they can change.</p></section>
+<section class="info-section"><h2>Corrections and new listings</h2>
+<p>Readers help keep the directory accurate. If a listing is wrong, or you know a spot we are missing, send it through the <a href="{FORM}" target="_blank" rel="noopener">restaurant submission form</a> with the restaurant name, neighborhood, and what oil it cooks with.</p></section>
+<section class="info-section"><h2>Limits</h2>
+<p>Kitchens change suppliers and fryer oils without notice, and a verified tag shows what we confirmed at the time. Confirm with the restaurant before you go, especially if you are avoiding seed oils for a medical reason.</p>
+<p><a href="/nyc/manhattan/">Manhattan</a> · <a href="/nyc/brooklyn/">Brooklyn</a> · <a href="/nyc/queens/">Queens</a> · <a href="/chains/">Chain guides</a></p></section>"""
+page(vp,
+     "How SeedOilFree Verifies Restaurants | SeedOilFree",
+     f"How SeedOilFree labels NYC restaurants: {n_ver} of {len(nyc)} independent listings verified in person, plus what REPORTED, CLEAN, PARTIAL and HACK ONLY mean.",
+     "How SeedOilFree Verifies Restaurants",
+     "Every listing shows how much we know about it. Here is what each label means and where the unverified ones come from.",
+     "", [{"@type": "AboutPage", "name": "How SeedOilFree verifies restaurants", "url": SITE + vp}],
+     [("Home", "/"), ("How we verify", vp)], extra_html=verify_body)
+urls.append((vp, "0.5"))
+
 # ---------- sitemap ----------
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for p, pr in urls:
@@ -388,7 +412,7 @@ for b, label in BOROUGHS.items():
 blk.append("</p><p class=\"navlinks\">")
 for h in sorted(hood_pages):
     blk.append(f'<a href="/nyc/{slugify(h)}/">{e(h)}</a>')
-blk.append('</p><p class="navlinks"><a href="/chains/">Chain restaurant guides</a></p></section>')
+blk.append('</p><p class="navlinks"><a href="/chains/">Chain restaurant guides</a> <a href="/how-we-verify/">How we verify</a></p></section>')
 blk.append(B)
 block = "\n".join(blk)
 if A in src:
