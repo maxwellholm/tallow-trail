@@ -122,11 +122,12 @@ def faq_ld(qas):
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in qas]}
 
 
-def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None):
+def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, extra_html=""):
     canon = SITE + path
     graph = [crumbs(crumb_items)] + ld
     if extra_faq:
         graph.append(faq_ld(extra_faq))
+    extra_block = f"\n  {extra_html}" if extra_html else ""
     faq_html = ""
     if extra_faq:
         faq_html = '<section class="info-section"><h2>Common questions</h2>' + "".join(
@@ -174,7 +175,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None):
   <p class="sub">{intro}</p>
   <div class="rows">
 {body}
-  </div>
+  </div>{extra_block}
   {faq_html}
   <section class="submit-box">
     <div class="title">Know a spot that's missing?</div>
@@ -201,6 +202,76 @@ def rest_ld(r):
     return d
 
 
+
+# ---------- hub enrichment helpers (facts come only from the parsed listings) ----------
+FAT_WORDS = [("tallow", "beef tallow"), ("butter", "butter"), ("ghee", "ghee"), ("olive", "olive oil"), ("evoo", "olive oil"),
+             ("lard", "pork lard"), ("avocado", "avocado oil"), ("coconut", "coconut oil")]
+
+
+def plural(n, one, many=None):
+    return f"{n} {one if n == 1 else (many or one + 's')}"
+
+
+def glance_html(items, where):
+    n = len(items)
+    ver = sum(r["verified"] for r in items)
+    clean = [r for r in items if r["status"] == "clean"]
+    partial = [r for r in items if r["status"] == "partial"]
+    hack = [r for r in items if r["status"] == "hack"]
+    reported = [r for r in clean if not r["verified"]]
+    unver = n - ver
+    if ver == 0:
+        parts = [f"{plural(n, 'listing')} in {e(where)}, none verified in person by us yet."]
+    else:
+        parts = [f"Of the {plural(n, 'listing')} in {e(where)}, {ver} {'was' if ver == 1 else 'were'} verified in person by us."]
+    bits = []
+    if clean:
+        bits.append(f"{len(clean)} {'is' if len(clean) == 1 else 'are'} listed as cooking without seed oils")
+    if partial:
+        bits.append(f"{len(partial)} {'is' if len(partial) == 1 else 'are'} only partly seed-oil-free")
+    if hack:
+        bits.append(f"{len(hack)} use{'s' if len(hack) == 1 else ''} seed oil but can be ordered around")
+    if bits:
+        parts.append("; ".join(bits).capitalize() + ".")
+    if unver and ver:
+        parts.append(f"{unver} other{'' if unver == 1 else 's'} {'is' if unver == 1 else 'are'} not yet verified in person and {'comes' if unver == 1 else 'come'} from public sources.")
+    elif unver:
+        parts.append("These listings come from public sources and are not yet verified in person.")
+    found = []
+    for label in dict.fromkeys(l for _, l in FAT_WORDS):
+        keys = [k for k, l in FAT_WORDS if l == label]
+        c = sum(1 for r in items if any(k in r["fat"].lower() for k in keys))
+        if c:
+            found.append((c, label))
+    found.sort(key=lambda t: (-t[0], t[1]))
+    if found:
+        parts.append("Cooking fats named across these listings: " + ", ".join(f"{e(l)} ({plural(c, 'spot')})" for c, l in found) + ".")
+    return ('<section class="info-section"><h2>At a glance</h2><p>' + " ".join(parts) + "</p></section>")
+
+
+def labels_html():
+    return ('<section class="info-section"><h2>What the labels mean</h2>'
+            "<p><strong>CLEAN</strong>: cooks without seed oils. "
+            "<strong>PARTIAL</strong>: some items or the fryer still use seed oil. "
+            "<strong>HACK ONLY</strong>: uses seed oils, but you can order around them. "
+            "<strong>REPORTED</strong>: listed as seed-oil-free by public sources, not yet verified in person. "
+            "Kitchens change suppliers, so confirm with the restaurant before you go.</p></section>")
+
+
+def nearby_html(h, b):
+    sib = [(x, v) for x, v in sorted(hood_pages.items()) if x != h and hood_borough[x] == b]
+    out = []
+    if sib:
+        out.append('<p class="navlinks">' + "".join(
+            f'<a href="/nyc/{slugify(x)}/">{e(x)} ({len(v)})</a>' for x, v in sib) + "</p>")
+    others = [r for r in by_borough[b] if r["hood"] != h and r["verified"]][:6]
+    if others:
+        out.append("<p>Other verified spots in " + e(BOROUGHS[b]) + ": " + ", ".join(
+            f'<a href="{url_for("restaurants", r["id"])}">{e(r["name"])}</a> ({e(r["hood"])})' for r in others) + ".</p>")
+    out.append(f'<p><a href="/nyc/{b}/">All {e(BOROUGHS[b])} listings</a> · <a href="/chains/">Chain ordering guides</a></p>')
+    return '<section class="info-section"><h2>Keep exploring</h2>' + "".join(out) + "</section>"
+
+
 urls = [("/", "1.0")]
 n_hood = n_rest = n_chain = 0
 
@@ -224,7 +295,8 @@ for b, label in BOROUGHS.items():
            "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": rest_ld(r)} for i, r in enumerate(items)]}],
          [("Home", "/"), (label, path)],
          [(f"Are there seed oil free restaurants in {label}?",
-           f"Yes. SeedOilFree lists {len(items)} in {label}, and {ver} of them have been verified in person. The rest are reported as seed-oil-free but not yet confirmed.")])
+           f"Yes. SeedOilFree lists {len(items)} in {label}, and {ver} of them have been verified in person. The rest are reported as seed-oil-free but not yet confirmed.")],
+         extra_html=glance_html(items, label) + labels_html() + '<section class="info-section"><h2>Neighborhoods</h2><p class="navlinks">' + links + '</p></section>')
     urls.append((path, "0.8"))
 
 # ---------- neighborhood pages ----------
@@ -243,7 +315,8 @@ for h, items in sorted(hood_pages.items()):
            "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": rest_ld(r)} for i, r in enumerate(items)]}],
          [("Home", "/"), (BOROUGHS[b], f"/nyc/{b}/"), (h, path)],
          [(f"What are the best seed oil free restaurants in {h}?",
-           f"SeedOilFree lists {len(items)} in {h}: " + ", ".join(r["name"] for r in items) + f". {ver} have been verified in person.")])
+           f"SeedOilFree lists {len(items)} in {h}: " + ", ".join(r["name"] for r in items) + f". {ver} have been verified in person.")],
+         extra_html=glance_html(items, h) + labels_html() + nearby_html(h, b))
     urls.append((path, "0.8"))
     n_hood += 1
 
