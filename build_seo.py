@@ -179,7 +179,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, ex
   {faq_html}
   <section class="submit-box">
     <div class="title">Know a spot that's missing?</div>
-    <p>Tell us the name, neighborhood, and what oil they cook with. We verify NYC listings in person before they go live.</p>
+    <p>Tell us the name, neighborhood, and what oil they cook with. We label every listing so you know whether we have verified it in person.</p>
     <a href="{FORM}" target="_blank">Verify or suggest a spot →</a>
   </section>
   <p><a href="/">← All seed oil free restaurants in NYC</a></p>
