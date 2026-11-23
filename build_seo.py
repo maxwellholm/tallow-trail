@@ -211,6 +211,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, ex
   .pill.confirmed {{ background: var(--sage-soft); color: var(--sage); }}
   .navlinks a {{ display: inline-block; margin: 0 10px 8px 0; }}
 {NL_CSS}</style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="page">
