@@ -25,6 +25,10 @@ ROOT = Path(__file__).parent
 SITE = "https://www.seedoilfree.io"
 TODAY = "2026-11-16"
 FORM = "https://docs.google.com/forms/d/e/1FAIpQLScsp772u4Dn8vuZAyEnDB0y6Jvti7MJqHUeB5YC0RHwp_Le4Q/viewform?usp=sharing"
+# Newsletter: set NEWSLETTER_URL to the publication's base URL (e.g. "https://seedoilfree.substack.com")
+# once the Substack exists. While empty, the form falls back to a mailto so nothing is silently lost.
+NEWSLETTER_URL = ""
+NEWSLETTER_FALLBACK_EMAIL = "maxholm21@gmail.com"
 BOROUGHS = {"manhattan": "Manhattan", "brooklyn": "Brooklyn", "queens": "Queens"}
 
 src = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -111,6 +115,45 @@ def card(r, link=True):
 </div>'''
 
 
+NL_CSS = """
+  .nl-box { background: var(--sage-soft); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin: 28px 0; }
+  .nl-box .title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; margin: 0 0 6px; }
+  .nl-box p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; line-height: 1.5; }
+  .nl-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nl-form input[type=email] { flex: 1 1 220px; min-width: 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 15px; background: var(--bg); color: var(--ink); }
+  .nl-form button { padding: 11px 18px; border: 0; border-radius: 10px; background: var(--sage); color: #fff; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .nl-fine { font-size: 12px !important; margin: 10px 0 0 !important; }
+  .nl-fine a { color: var(--sage); font-weight: 600; }
+  .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .post-grid li { margin: 0; }
+  .post-grid a { display: block; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg); }
+  .post-grid img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  .post-grid .cap { padding: 8px 10px 10px; font-size: 12.5px; line-height: 1.35; color: var(--ink-soft); }
+  .post-grid .cap b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
+  .issue-list { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .issue-list a { display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: inherit; background: var(--bg); }
+"""
+
+
+def newsletter_box(where="site"):
+    """Signup form. Posts to Substack when NEWSLETTER_URL is set, else a mailto fallback."""
+    if NEWSLETTER_URL:
+        action = NEWSLETTER_URL.rstrip("/") + "/api/v1/free?nojs=true"
+        attrs = f'action="{e(action)}" method="post" target="_blank"'
+    else:
+        attrs = (f'action="mailto:{NEWSLETTER_FALLBACK_EMAIL}?subject=Subscribe%20me%20to%20The%20Oil%20Report" '
+                 'method="post" enctype="text/plain"')
+    return f"""<section class="nl-box" id="newsletter-signup" aria-labelledby="nl-title-{where}">
+  <div class="title" id="nl-title-{where}">The Oil Report: new seed-oil-free NYC spots, weekly</div>
+  <p>One short email a week: a restaurant we checked, one question to ask the kitchen, and a place to double-check. Every listing carries its label: verified in person, confirmed by the restaurant, or reported.</p>
+  <form class="nl-form" {attrs} onsubmit="if(window.gtag)gtag('event','newsletter_signup',{{location:'{where}'}})">
+    <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address">
+    <button type="submit">Subscribe</button>
+  </form>
+  <p class="nl-fine">Free. No spam. Unsubscribe anytime. <a href="/newsletter/">See what you'll get</a></p>
+</section>"""
+
+
 def crumbs(items):
     return {"@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + p}
@@ -122,7 +165,7 @@ def faq_ld(qas):
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in qas]}
 
 
-def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, extra_html=""):
+def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, extra_html="", nl=True):
     canon = SITE + path
     graph = [crumbs(crumb_items)] + ld
     if extra_faq:
@@ -161,7 +204,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, ex
   .crumbs a, .row-name a {{ color: inherit; }}
   .pill.reported {{ background: var(--amber-soft); color: var(--amber); }}
   .navlinks a {{ display: inline-block; margin: 0 10px 8px 0; }}
-</style>
+{NL_CSS}</style>
 </head>
 <body>
 <div class="page">
@@ -177,6 +220,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, ex
 {body}
   </div>{extra_block}
   {faq_html}
+  {newsletter_box("page") if nl else ""}
   <section class="submit-box">
     <div class="title">Know a spot that's missing?</div>
     <p>Tell us the name, neighborhood, and what oil they cook with. We label every listing so you know whether we have verified it in person.</p>
@@ -396,6 +440,54 @@ page(vp,
      [("Home", "/"), ("How we verify", vp)], extra_html=verify_body)
 urls.append((vp, "0.5"))
 
+# ---------- newsletter + post archive ----------
+IG_PROFILE = "https://www.instagram.com/seedoilfree.io/"
+nl_path = "/newsletter/"
+issues = json.loads((ROOT / "newsletter" / "issues.json").read_text(encoding="utf-8")) if (ROOT / "newsletter" / "issues.json").exists() else []
+if issues:
+    issue_html = '<ul class="issue-list">' + "".join(
+        f'<li><a href="{e(i["url"])}"><strong>{e(i["title"])}</strong><br><span style="color:var(--ink-soft);font-size:13px">{e(i["date"])} · {e(i["summary"])}</span></a></li>'
+        for i in issues) + "</ul>"
+else:
+    issue_html = "<p>The first issue is on its way. Subscribe above and it lands in your inbox.</p>"
+# Cover images live in /assets/posts/. Captions are the card headline only; nothing else is claimed.
+POSTS = [
+    ("A1", "Ask this before you order", "Carousel"), ("B1", "Honest lists only", "Carousel"),
+    ("C1", "4 places to eat without seed oils, Upper East Side", "Carousel"),
+    ("D1", "4 places oils hide when you eat out", "Carousel"), ("E1", "Spots we checked in person", "Carousel"),
+    ("F1", "Hearth, East Village (verified in person)", "Spotlight"), ("F2", "3 questions that change your order", "Ask first"),
+    ("F3", "Thanksgiving week", "Community"), ("F4", "Beef tallow burgers and fries", "Burger night"),
+    ("F5", "Chains, labeled per our listings", "Chain check"), ("F6", "Even good spots have a fryer", "Read the caveat"),
+    ("F7", "West Village picks", "Neighborhood"), ("F8", "Brooklyn spots on our radar (reported)", "Neighborhood"),
+    ("F9", "Flatiron picks (verified in person)", "Neighborhood"), ("F10", "Know a spot we're missing?", "Submit"),
+    ("F11", "Astoria, Queens (reported)", "Neighborhood"), ("G1", "4 questions to ask about the oil", "Ask first"),
+    ("G2", "Three levels, never blurred", "How we label"), ("G3", "Straight from the kitchen", "Confirmed by the restaurant"),
+]
+post_grid = '<ul class="post-grid">' + "".join(
+    f'<li><a href="{IG_PROFILE}" target="_blank" rel="noopener"><img src="/assets/posts/{k}.jpg" width="432" height="540" loading="lazy" '
+    f'alt="{e(t)}: SeedOilFree Instagram post"><div class="cap"><b>{e(t)}</b>{e(kind)}</div></a></li>'
+    for k, t, kind in POSTS) + "</ul>"
+nl_body = f"""{newsletter_box("newsletter-page")}
+<section class="info-section"><h2>What's in every issue</h2>
+<p><strong>One restaurant, with its label.</strong> A NYC spot from the directory, marked verified in person, confirmed by the restaurant, or reported.</p>
+<p><strong>One question to ask the kitchen.</strong> What do you fry in, what do you sear with, what is in the dressings.</p>
+<p><strong>One place to double-check.</strong> Fryers and suppliers change, so we flag what to confirm before you go.</p>
+<p>Read <a href="/how-we-verify/">how we verify</a> or browse the <a href="/nyc/manhattan/">Manhattan</a>, <a href="/nyc/brooklyn/">Brooklyn</a> and <a href="/nyc/queens/">Queens</a> lists.</p></section>
+<section class="info-section"><h2>Past issues</h2>{issue_html}</section>
+<section class="info-section"><h2>From our Instagram</h2>
+<p>Every post we've shared, from the questions to ask to the restaurants we checked. <a href="{IG_PROFILE}" target="_blank" rel="noopener">Follow @seedoilfree.io</a></p>{post_grid}</section>"""
+page(nl_path,
+     "The Oil Report: Weekly Seed Oil Free NYC Newsletter | SeedOilFree",
+     "A short weekly email with a NYC restaurant we checked, one question to ask the kitchen, and a place to double-check. Free.",
+     "The Oil Report: Seed Oil Free NYC, Weekly",
+     "A short weekly email for people who want to eat out in New York without guessing about the oil.",
+     "", [{"@type": "CollectionPage", "name": "The Oil Report newsletter", "url": SITE + nl_path}],
+     [("Home", "/"), ("Newsletter", nl_path)],
+     [("What is The Oil Report?", "A free weekly email from SeedOilFree with a NYC restaurant we checked, one question to ask the kitchen, and a place to double-check."),
+      ("How do you decide which restaurants to feature?", "Each pick comes from the directory and carries its label: verified in person, confirmed by the restaurant, or reported.")],
+     extra_html=nl_body, nl=False)
+urls.append((nl_path, "0.7"))
+
 # ---------- sitemap ----------
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for p, pr in urls:
@@ -412,7 +504,7 @@ for b, label in BOROUGHS.items():
 blk.append("</p><p class=\"navlinks\">")
 for h in sorted(hood_pages):
     blk.append(f'<a href="/nyc/{slugify(h)}/">{e(h)}</a>')
-blk.append('</p><p class="navlinks"><a href="/chains/">Chain restaurant guides</a> <a href="/how-we-verify/">How we verify</a></p></section>')
+blk.append('</p><p class="navlinks"><a href="/chains/">Chain restaurant guides</a> <a href="/how-we-verify/">How we verify</a> <a href="/newsletter/">Newsletter</a></p></section>')
 blk.append(B)
 block = "\n".join(blk)
 if A in src:
@@ -426,6 +518,15 @@ def _fix_home_pill(m):
         blk = blk.replace('<div class="pill clean">CLEAN</div>', '<div class="pill reported">REPORTED</div>')
     return blk
 src = pat.sub(_fix_home_pill, src)
+# homepage signup box (idempotent)
+NA, NB = "<!-- nl-box:start -->", "<!-- nl-box:end -->"
+nl_block = NA + "\n" + newsletter_box("home") + "\n" + NB
+if NA in src:
+    src = re.sub(re.escape(NA) + ".*?" + re.escape(NB), nl_block.replace("\\", "\\\\"), src, flags=re.S)
+else:
+    src = src.replace('<section class="submit-box">', nl_block + '\n\n  <section class="submit-box">', 1)
+if ".nl-box {" not in src:
+    src = src.replace("</style>", NL_CSS + "</style>", 1)
 if ".pill.reported" not in src:
     src = src.replace("  .pill.hack {", "  .pill.reported { background: var(--amber-soft); color: var(--amber); }\n  .pill.hack {", 1)
 (ROOT / "index.html").write_text(src, encoding="utf-8")

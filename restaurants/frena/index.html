@@ -398,10 +398,43 @@
     .filters { position: static; }
   }
 
+  .nl-box { background: var(--sage-soft); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin: 28px 0; }
+  .nl-box .title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; margin: 0 0 6px; }
+  .nl-box p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; line-height: 1.5; }
+  .nl-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nl-form input[type=email] { flex: 1 1 220px; min-width: 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 15px; background: var(--bg); color: var(--ink); }
+  .nl-form button { padding: 11px 18px; border: 0; border-radius: 10px; background: var(--sage); color: #fff; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .nl-fine { font-size: 12px !important; margin: 10px 0 0 !important; }
+  .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .post-grid li { margin: 0; }
+  .post-grid a { display: block; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg); }
+  .post-grid img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  .post-grid .cap { padding: 8px 10px 10px; font-size: 12.5px; line-height: 1.35; color: var(--ink-soft); }
+  .post-grid .cap b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
+  .issue-list { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .issue-list a { display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: inherit; background: var(--bg); }
+
   .crumbs { font-size: 13px; color: var(--ink-soft); margin: 0 0 14px; }
   .crumbs a, .row-name a { color: inherit; }
   .pill.reported { background: var(--amber-soft); color: var(--amber); }
   .navlinks a { display: inline-block; margin: 0 10px 8px 0; }
+
+  .nl-box { background: var(--sage-soft); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin: 28px 0; }
+  .nl-box .title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; margin: 0 0 6px; }
+  .nl-box p { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; line-height: 1.5; }
+  .nl-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nl-form input[type=email] { flex: 1 1 220px; min-width: 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 15px; background: var(--bg); color: var(--ink); }
+  .nl-form button { padding: 11px 18px; border: 0; border-radius: 10px; background: var(--sage); color: #fff; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .nl-fine { font-size: 12px !important; margin: 10px 0 0 !important; }
+  .nl-fine a { color: var(--sage); font-weight: 600; }
+  .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .post-grid li { margin: 0; }
+  .post-grid a { display: block; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg); }
+  .post-grid img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  .post-grid .cap { padding: 8px 10px 10px; font-size: 12.5px; line-height: 1.35; color: var(--ink-soft); }
+  .post-grid .cap b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
+  .issue-list { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .issue-list a { display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: inherit; background: var(--bg); }
 </style>
 </head>
 <body>
@@ -428,6 +461,15 @@
 </div>
   </div>
   <section class="info-section"><h2>Common questions</h2><h3>What oil does Frena cook with?</h3><p>Fully seed-oil-free. Verified in person by SeedOilFree.</p><h3>Is Frena seed oil free?</h3><p>Verified in person — fully seed-oil-free. Modern Israeli/Middle Eastern spot with a wood-fired taboon oven for fresh bread.</p></section>
+  <section class="nl-box" id="newsletter-signup" aria-labelledby="nl-title-page">
+  <div class="title" id="nl-title-page">The Oil Report: new seed-oil-free NYC spots, weekly</div>
+  <p>One short email a week: a restaurant we checked, one question to ask the kitchen, and a place to double-check. Every listing carries its label: verified in person, confirmed by the restaurant, or reported.</p>
+  <form class="nl-form" action="mailto:maxholm21@gmail.com?subject=Subscribe%20me%20to%20The%20Oil%20Report" method="post" enctype="text/plain" onsubmit="if(window.gtag)gtag('event','newsletter_signup',{location:'page'})">
+    <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address">
+    <button type="submit">Subscribe</button>
+  </form>
+  <p class="nl-fine">Free. No spam. Unsubscribe anytime. <a href="/newsletter/">See what you'll get</a></p>
+</section>
   <section class="submit-box">
     <div class="title">Know a spot that's missing?</div>
     <p>Tell us the name, neighborhood, and what oil they cook with. We label every listing so you know whether we have verified it in person.</p>
