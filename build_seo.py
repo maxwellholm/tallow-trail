@@ -27,7 +27,7 @@ TODAY = "2026-11-16"
 FORM = "https://docs.google.com/forms/d/e/1FAIpQLScsp772u4Dn8vuZAyEnDB0y6Jvti7MJqHUeB5YC0RHwp_Le4Q/viewform?usp=sharing"
 # Newsletter: set NEWSLETTER_URL to the publication's base URL (e.g. "https://seedoilfree.substack.com")
 # once the Substack exists. While empty, the form falls back to a mailto so nothing is silently lost.
-NEWSLETTER_URL = ""
+NEWSLETTER_URL = "https://seedoilfreenyc.substack.com"
 NEWSLETTER_FALLBACK_EMAIL = "maxholm21@gmail.com"
 BOROUGHS = {"manhattan": "Manhattan", "brooklyn": "Brooklyn", "queens": "Queens"}
 
