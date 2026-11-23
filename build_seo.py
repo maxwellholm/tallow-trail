@@ -546,6 +546,25 @@ if ".pill.confirmed" not in src:
     src = src.replace("  .pill.hack {", "  .pill.confirmed { background: var(--sage-soft); color: var(--sage); }\n  .pill.hack {", 1)
 if ".pill.reported" not in src:
     src = src.replace("  .pill.hack {", "  .pill.reported { background: var(--amber-soft); color: var(--amber); }\n  .pill.hack {", 1)
+# compact top-of-page signup strip (idempotent)
+TA, TB = "<!-- nl-top:start -->", "<!-- nl-top:end -->"
+nl_top = TA + """
+  <form class="nl-top" action="https://seedoilfreenyc.substack.com/api/v1/free?nojs=true" method="post" target="_blank" onsubmit="if(window.gtag)gtag('event','newsletter_signup',{location:'home-top'})">
+    <span class="nl-top-label">The Oil Report: new seed-oil-free NYC spots, weekly</span>
+    <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address">
+    <button type="submit">Subscribe</button>
+  </form>
+  """ + TB
+if TA in src:
+    src = re.sub(re.escape(TA) + ".*?" + re.escape(TB), nl_top.replace("\\", "\\\\"), src, flags=re.S)
+else:
+    src = src.replace('\n  <h2 class="sr-only">Restaurant listings</h2>', "\n  " + nl_top + '\n\n  <h2 class="sr-only">Restaurant listings</h2>', 1)
+if ".nl-top {" not in src:
+    src = src.replace("</style>", """  .nl-top { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--sage-soft); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 0 0 16px; }
+  .nl-top .nl-top-label { flex: 1 1 100%; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .nl-top input[type=email] { flex: 1 1 180px; min-width: 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 15px; background: var(--bg); color: var(--ink); }
+  .nl-top button { padding: 9px 16px; border: 0; border-radius: 10px; font: inherit; font-weight: 700; background: var(--ink); color: var(--bg); cursor: pointer; }
+</style>""", 1)
 (ROOT / "index.html").write_text(src, encoding="utf-8")
 
 print(f"{len(rows)} listings -> {len(urls)} URLs "
