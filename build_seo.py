@@ -67,6 +67,9 @@ for m in pat.finditer(src):
         fat=strip_tags(g("row-fat")), ig_url=ig.group(1) if ig else None,
         ig_handle=ig.group(2) if ig else None, icon=icon, hood=hood))
 
+for r in rows:  # confirmed with the restaurant (phone/email) but not visited
+    r["confirmed"] = (r["status"] == "clean" and not r["verified"] and r["type"] == "independent"
+                      and re.search(r"confirmed (with the restaurant|by phone|by email)", r["fat"].lower()) is not None)
 nyc = [r for r in rows if r["state"] == "NY" and r["type"] == "independent"]
 chains = [r for r in rows if r["type"] == "chain"]
 by_hood = defaultdict(list)
@@ -102,6 +105,8 @@ def card(r, link=True):
     # a "clean" listing nobody has verified in person is shown as REPORTED, not CLEAN
     reported = r["status"] == "clean" and not r["verified"] and r["type"] == "independent"
     pill_cls, pill_txt = ("reported", "REPORTED") if reported else (r["status"], PILL[r["status"]])
+    if r.get("confirmed"):
+        pill_cls, pill_txt = "confirmed", "CONFIRMED"
     return f'''<div class="row">
   <div class="row-icon">{r["icon"]}</div>
   <div class="row-main">
@@ -203,6 +208,7 @@ def page(path, title, desc, h1, intro, body, ld, crumb_items, extra_faq=None, ex
   .crumbs {{ font-size: 13px; color: var(--ink-soft); margin: 0 0 14px; }}
   .crumbs a, .row-name a {{ color: inherit; }}
   .pill.reported {{ background: var(--amber-soft); color: var(--amber); }}
+  .pill.confirmed {{ background: var(--sage-soft); color: var(--sage); }}
   .navlinks a {{ display: inline-block; margin: 0 10px 8px 0; }}
 {NL_CSS}</style>
 </head>
@@ -298,6 +304,7 @@ def labels_html():
             "<p><strong>CLEAN</strong>: cooks without seed oils. "
             "<strong>PARTIAL</strong>: some items or the fryer still use seed oil. "
             "<strong>HACK ONLY</strong>: uses seed oils, but you can order around them. "
+            "<strong>CONFIRMED</strong>: the restaurant told us directly by phone or email, but we have not visited. "
             "<strong>REPORTED</strong>: listed as seed-oil-free by public sources, not yet verified in person. "
             "Kitchens change suppliers, so confirm with the restaurant before you go. <a href=\"/how-we-verify/\">How we verify</a></p></section>")
 
@@ -368,7 +375,12 @@ for h, items in sorted(hood_pages.items()):
 for r in nyc:
     b = r["area"]
     path = url_for("restaurants", r["id"])
-    status_line = "Verified in person by SeedOilFree." if r["verified"] else "Reported as seed-oil-free but not yet verified in person."
+    if r["verified"]:
+        status_line = "Verified in person by SeedOilFree."
+    elif r["confirmed"]:
+        status_line = "Confirmed seed-oil-free directly with the restaurant by SeedOilFree, not yet verified in person."
+    else:
+        status_line = "Reported as seed-oil-free but not yet verified in person."
     near = [x for x in by_hood[r["hood"]] if x["id"] != r["id"]][:4]
     near_html = ""
     if near:
@@ -379,7 +391,7 @@ for r in nyc:
          f"Is {r['name']} Seed Oil Free? ({r['hood']}, NYC) | SeedOilFree",
          f"{r['name']} in {r['hood']}, NYC: {r['fat']}. {status_line}",
          f"Is {r['name']} Seed Oil Free?",
-         f"{e(r['name'])} in {e(r['hood'])} " + ("is reported to cook without seed oils" if r["status"] == "clean" and not r["verified"] else STATUS_TXT[r["status"]]) + f". {status_line} Last checked {TODAY}.",
+         f"{e(r['name'])} in {e(r['hood'])} " + ("is confirmed by the restaurant to cook without seed oils" if r["confirmed"] else "is reported to cook without seed oils" if r["status"] == "clean" and not r["verified"] else STATUS_TXT[r["status"]]) + f". {status_line} Last checked {TODAY}.",
          body,
          [rest_ld(r)],
          [("Home", "/"), (BOROUGHS.get(b, "NYC"), f"/nyc/{b}/"), (r["name"], path)],
@@ -423,6 +435,7 @@ vp = "/how-we-verify/"
 verify_body = f"""<section class="info-section"><h2>What the labels mean</h2>
 <p><strong>Verified in person.</strong> SeedOilFree confirmed the listing in person. These carry a verified tag. Right now that is {n_ver} of {len(nyc)} NYC independent listings.</p>
 <p><strong>CLEAN</strong> means the restaurant cooks without seed oils. <strong>PARTIAL</strong> means some items or the fryer still use seed oil. <strong>HACK ONLY</strong> means it uses seed oils, but you can order around them.</p>
+<p><strong>CONFIRMED</strong> means the restaurant told us directly, by phone or email, that it cooks without seed oils. We have not visited yet, so it is not verified in person.</p>
 <p><strong>REPORTED</strong> means the restaurant is listed as seed-oil-free by other sources but we have not confirmed it yet.</p></section>
 <section class="info-section"><h2>Where unverified listings come from</h2>
 <p>Reported listings come from other seed oil free directories, community posts, and press coverage. We show them because they can help you, and we label them so you know they are unconfirmed. Chain listings come from public databases and community reports, and they can change.</p></section>
@@ -514,6 +527,8 @@ else:
 # unverified "clean" independents show REPORTED on the homepage too
 def _fix_home_pill(m):
     blk = m.group(0)
+    if re.search(r"confirmed (with the restaurant|by phone|by email)", re.search(r'class="row-fat">(.*?)</div>', blk, re.S).group(1).lower()) and 'data-status="clean"' in blk and "✓ verified in person" not in blk:
+        return blk.replace('<div class="pill clean">CLEAN</div>', '<div class="pill confirmed">CONFIRMED</div>')
     if "reported, unverified" in blk:
         blk = blk.replace('<div class="pill clean">CLEAN</div>', '<div class="pill reported">REPORTED</div>')
     return blk
@@ -527,6 +542,8 @@ else:
     src = src.replace('<section class="submit-box">', nl_block + '\n\n  <section class="submit-box">', 1)
 if ".nl-box {" not in src:
     src = src.replace("</style>", NL_CSS + "</style>", 1)
+if ".pill.confirmed" not in src:
+    src = src.replace("  .pill.hack {", "  .pill.confirmed { background: var(--sage-soft); color: var(--sage); }\n  .pill.hack {", 1)
 if ".pill.reported" not in src:
     src = src.replace("  .pill.hack {", "  .pill.reported { background: var(--amber-soft); color: var(--amber); }\n  .pill.hack {", 1)
 (ROOT / "index.html").write_text(src, encoding="utf-8")
