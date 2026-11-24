@@ -380,6 +380,8 @@ for r in nyc:
         status_line = "Verified in person by SeedOilFree."
     elif r["confirmed"]:
         status_line = "Confirmed seed-oil-free directly with the restaurant by SeedOilFree, not yet verified in person."
+    elif r["status"] != "clean":
+        status_line = "Not yet verified in person. See the listing note for what is known."
     else:
         status_line = "Reported as seed-oil-free but not yet verified in person."
     near = [x for x in by_hood[r["hood"]] if x["id"] != r["id"]][:4]
